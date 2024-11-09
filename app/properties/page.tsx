@@ -4,14 +4,13 @@ import connectDB from '@/db/database';
 import Property from '@/models/property';
 
 interface PropertiesPageProps {
-  searchParams: {
-    pageSize?: string;
-    page?: string;
-  },
+  searchParams: Promise<{ pageSize?: string; page?: string; }>,
 }
 
-const PropertiesPage = async ({ searchParams: { page = '1', pageSize = '3' } }: PropertiesPageProps) => {
+const PropertiesPage = async ({ searchParams }: PropertiesPageProps) => {
   await connectDB();
+
+  const { pageSize = '3', page = '1' } = await searchParams;
   const skip = (parseInt(page) - 1) * parseInt(pageSize);
   const total = await Property.countDocuments({});
   const properties = await Property
