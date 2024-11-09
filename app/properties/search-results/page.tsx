@@ -1,12 +1,18 @@
+import { FaArrowAltCircleLeft } from "react-icons/fa";
 import Link from "next/link";
-import PropertyCard from "@/components/property-card";
 import PropertySearchForm from "@/components/property-search-form";
+import PropertyCard from "@/components/property-card";
 import connectDB from "@/db/database";
 import Property from "@/models/property";
-import { convertToSerializableObject } from "@/utils/convert-to-object";
-import { FaArrowAltCircleLeft } from "react-icons/fa";
 
-const SearchResultsPage = async ({ searchParams: { location, propertyType } }) => {
+interface SearchResultsPageProps {
+  searchParams: {
+    propertyType?: string; 
+    location: string;
+  };
+};
+
+const SearchResultsPage = async ({ searchParams: { location, propertyType } }: SearchResultsPageProps) => {
   await connectDB();
 
   const locationPattern = new RegExp(location, 'i');
@@ -27,8 +33,7 @@ const SearchResultsPage = async ({ searchParams: { location, propertyType } }) =
     query.type = typePattern;
   }
 
-  const propertiesDocs = await Property.find(query).lean();
-  const properties = convertToSerializableObject(propertiesDocs);
+  const properties = await Property.find(query).lean();
 
   return (
     <>

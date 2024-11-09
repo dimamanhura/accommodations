@@ -5,7 +5,8 @@ import Link from 'next/link';
 
 const HomeProperties = async () => {
   await connectDB();
-  const recentProperties =await Property
+
+  const recentProperties = await Property
     .find({})
     .sort({ createdAt: -1 })
     .limit(3)

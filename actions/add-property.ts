@@ -7,6 +7,23 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import cloudinary from "@/cloudinary";
 
+const getImageUrls = async (images: File[]) => {
+  const imageUrls = [];
+
+  for (const imageFile of images) {
+    const imageBuffer = await imageFile.arrayBuffer();
+    const imageArray = Array.from(new Uint8Array(imageBuffer));
+    const imageData = Buffer.from(imageArray);
+    const imageBase64 = imageData.toString('base64');
+    const result = await cloudinary.uploader.upload(`data:image/png;base64,${imageBase64}`, {
+      folder: 'accommodations',
+    });
+    imageUrls.push(result.secure_url);
+  }
+
+  return imageUrls;
+};
+
 async function addPropertyAction(formData: FormData) {
   await connectDB();
 
@@ -17,8 +34,8 @@ async function addPropertyAction(formData: FormData) {
   }
 
   const amenities = formData.getAll('amenities');
-  const images = formData.getAll('images')
-    .filter((image) => image.name !== '');
+  const images = (formData.getAll('images') as File[]).filter((image) => image.name !== '');
+  const imageUrls = await getImageUrls(images);
 
   const propertyData = {
     amenities,
@@ -45,25 +62,12 @@ async function addPropertyAction(formData: FormData) {
       email: formData.get('seller_info.email'),
       phone: formData.get('seller_info.phone'),
     },
+    images: imageUrls,
   };
-
-  const imageUrls = [];
-
-  for (const imageFile of images) {
-    const imageBuffer = await imageFile.arrayBuffer();
-    const imageArray = Array.from(new Uint8Array(imageBuffer));
-    const imageData = Buffer.from(imageArray);
-    const imageBase64 = imageData.toString('base64');
-    const result = await cloudinary.uploader.upload(`data:image/png;base64,${imageBase64}`, {
-      folder: 'accommodations',
-    });
-    imageUrls.push(result.secure_url);
-  }
-
-  propertyData.images = imageUrls;
 
   const newProperty = new Property(propertyData);
   await newProperty.save();
+
   revalidatePath('/', 'layout');
   redirect(`/properties/${newProperty._id}`);
 };

@@ -3,7 +3,11 @@
 import { FaExclamationCircle  } from "react-icons/fa";
 import Link from "next/link";
 
-const ErrorPage = ({ error }) => {
+interface ErrorPageProps {
+  error: Error;
+}
+
+const ErrorPage = ({ error }: ErrorPageProps) => {
   return (
     <section className="bg-blue-50 min-h-screen flex-grow">
       <div className="container m-auto max-w-2xl py-24">

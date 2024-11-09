@@ -1,10 +1,16 @@
 import Link from "next/link";
 
+interface PaginationProps {
+  totalItems: number;
+  pageSize: number;
+  page: number;
+};
+
 const Pagination = ({
   totalItems,
   pageSize,
   page,
-}) => {
+}: PaginationProps) => {
   const totalPages = Math.ceil(totalItems / pageSize);
 
   if (totalPages <= 1)  {

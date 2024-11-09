@@ -15,7 +15,14 @@ async function bookmarkPropertyAction(propertyId: string) {
   }
 
   const user = await User.findById(session.user.id);
-  let isBookmarked = user.bookmarks.includes(propertyId);
+
+  if (!user) {
+    throw new Error('User ID is required');
+  }
+
+  let isBookmarked = user.bookmarks
+    .map(bookmark => bookmark.toString())
+    .includes(propertyId);
   let message: string;
 
   if (isBookmarked) {

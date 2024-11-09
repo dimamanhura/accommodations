@@ -1,9 +1,6 @@
 import addPropertyAction from "@/actions/add-property";
 
-interface PropertyAddFormProps {
-}
-
-const PropertyAddForm = ({}: PropertyAddFormProps) => {
+const PropertyAddForm = () => {
   return (
     <form action={addPropertyAction}>
       <h2 className="text-3xl text-center font-semibold mb-6">

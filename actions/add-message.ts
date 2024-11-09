@@ -4,7 +4,7 @@ import { auth } from "@/auth";
 import connectDB from "@/db/database";
 import Message from "@/models/message";
 
-async function addMessageAction(prevState: any, formData: FormData) {
+async function addMessageAction(prevState: { submitted: boolean, error: string | null }, formData: FormData) {
   await connectDB();
 
   const session = await auth();

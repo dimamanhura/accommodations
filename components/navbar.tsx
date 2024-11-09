@@ -9,14 +9,18 @@ import { FaGoogle } from 'react-icons/fa';
 import { signIn, signOut, useSession, getProviders } from 'next-auth/react';
 import UnreadMessageCount from './unread-message-count';
 
+interface ProvidersType {
+  [key: string]: {
+    id: string;
+  };
+};
+
 const Navbar = () => {
   const { data: session } = useSession();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false);
   const pathname = usePathname();
-  const [providers, setProviders] = useState<any>(null);
-
-  
+  const [providers, setProviders] = useState<ProvidersType | null>(null);
 
   useEffect(() => {
     const setAuthProviders = async () => {
@@ -26,9 +30,6 @@ const Navbar = () => {
 
     setAuthProviders();
   }, []);
-
-  console.log(session);
-  console.log(providers);
 
   return (
     <nav className="bg-blue-700 border-b border-blue-500">

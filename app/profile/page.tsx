@@ -5,7 +5,6 @@ import { auth } from "@/auth";
 import profileDefault from '@/assets/images/profile.png';
 import { notFound } from "next/navigation";
 import ProfileProperties from "@/components/profile-properties";
-import { convertToSerializableObject } from "@/utils/convert-to-object";
 
 const ProfilePage = async () => {
   await connectDB();
@@ -15,8 +14,7 @@ const ProfilePage = async () => {
     return notFound();
   }
 
-  const propertiesDocs = await Property.find({ owner: session.user.id }).lean();
-  const properties = propertiesDocs.map(propertyDoc => convertToSerializableObject(propertyDoc))
+  const properties = await Property.find({ owner: session.user.id }).lean();
 
   return (
     <section className="bg-blue-50">

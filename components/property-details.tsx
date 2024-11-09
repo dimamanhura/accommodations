@@ -1,3 +1,4 @@
+import { IProperty } from "@/models/property";
 import {
   FaRulerCombined,
   FaMapMarked,
@@ -7,7 +8,11 @@ import {
   FaBed,
 } from "react-icons/fa";
 
-const PropertyDetails = ({ property }) => {
+interface PropertyDetailsProps {
+  property: IProperty;
+};
+
+const PropertyDetails = ({ property }: PropertyDetailsProps) => {
   return (
     <main>
       <div className="bg-white p-6 rounded-lg shadow-md text-center md:text-left">

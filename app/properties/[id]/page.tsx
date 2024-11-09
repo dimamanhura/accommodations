@@ -9,7 +9,6 @@ import PropertyImages from "@/components/property-images";
 import ShareButtons from "@/components/share-buttons";
 import connectDB from "@/db/database";
 import Property from "@/models/property";
-import { convertToSerializableObject } from "@/utils/convert-to-object";
 
 interface PropertyPageProps {
   params: {
@@ -19,13 +18,11 @@ interface PropertyPageProps {
 
 const PropertyPage = async ({ params }: PropertyPageProps) => {
   await connectDB();
-  const propertyDoc = await Property.findById(params.id).lean();
+  const property = await Property.findById(params.id).lean();
 
-  if (!propertyDoc) {
+  if (!property) {
     return notFound();
   }
-
-  const property = convertToSerializableObject(propertyDoc);
 
   return (
     <>
@@ -43,7 +40,7 @@ const PropertyPage = async ({ params }: PropertyPageProps) => {
             <PropertyDetails property={property}/>
             <aside className="space-y-4">
               <BookmarkButton property={property} />
-              <ShareButtons property={property} />
+              <ShareButtons />
               <PropertyContactForm property={property} />
             </aside>
           </div>

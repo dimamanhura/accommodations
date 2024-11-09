@@ -29,7 +29,7 @@ async function deletePropertyAction(propertyId: string) {
 
   const publicIds = property.images.map((imageUrl: string) => {
     const parts = imageUrl.split('/');
-    return parts.at(-1).split('.').at(0);
+    return parts?.at(-1)?.split('.').at(0);
   });
 
   if (publicIds.length) {

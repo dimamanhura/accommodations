@@ -1,7 +1,6 @@
 import PropertyEditForm from "@/components/property-edit-form";
 import connectDB from "@/db/database";
 import Property from "@/models/property";
-import { convertToSerializableObject } from "@/utils/convert-to-object";
 import { notFound } from "next/navigation";
 
 interface PropertyPageProps {
@@ -12,13 +11,12 @@ interface PropertyPageProps {
 
 const PropertyEditPage = async ({ params }: PropertyPageProps) => {
   await connectDB();
-  const propertyDoc = await Property.findById(params.id).lean();
 
-  if (!propertyDoc) {
+  const property = await Property.findById(params.id).lean();
+
+  if (!property) {
     return notFound();
   }
-
-  const property = convertToSerializableObject(propertyDoc);
 
   return (
     <section className="bg-blue-50">

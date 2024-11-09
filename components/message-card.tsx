@@ -4,8 +4,14 @@ import { useState } from "react";
 import markMessageAsRead from "@/actions/mark-message-as-read";
 import deleteMessage from "@/actions/delete-message";
 import { useGlobalContext } from "@/context/global-context";
+import { IMessage } from "@/models/message";
+import { IProperty } from "@/models/property";
 
-const MessageCard = ({ message }) => {
+interface MessageCardProps {
+  message: IMessage & { property: IProperty };
+}
+
+const MessageCard = ({ message }: MessageCardProps) => {
   const { setUnreadCount } = useGlobalContext();
   const [isRead, setIsRead] = useState(message.read);
 

@@ -4,8 +4,13 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import deletePropertyAction from "@/actions/delete-property";
+import { IProperty } from "@/models/property";
 
-const ProfileProperties = ({ initialProperties }) => {
+interface ProfilePropertiesProps {
+  initialProperties: IProperty[];
+};
+
+const ProfileProperties = ({ initialProperties }: ProfilePropertiesProps) => {
   const [properties, setProperties] = useState(initialProperties);
 
   const handleDeleteProperty = async (propertyId: string) => {

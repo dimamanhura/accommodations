@@ -1,6 +1,10 @@
 import Image from "next/image";
 
-const PropertyImages = ({ images }) => {
+interface PropertyImagesProps {
+  images: string[];
+};
+
+const PropertyImages = ({ images }: PropertyImagesProps) => {
   return (
     <section className="bg-blue-50 p-4">
       <div className="container mx-auto">

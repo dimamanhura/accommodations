@@ -1,11 +1,13 @@
 import connectDB from "@/db/database";
-import Message from "@/models/message";
-import { convertToSerializableObject } from "@/utils/convert-to-object";
+import Message, { IMessage } from "@/models/message";
 import { auth } from "@/auth";
 import MessageCard from "@/components/message-card";
+import { IUser } from "@/models/user";
+import { IProperty } from "@/models/property";
 
 const MessagePage = async () => {
   await connectDB();
+
   const session = await auth();
 
   const readMessage = await Message
@@ -28,17 +30,11 @@ const MessagePage = async () => {
     .sort({
       createdAt: -1,
     })
-    .populate('sender', 'username')
-    .populate('property', 'name')
+    .populate<{ sender: IUser }>('sender', 'username')
+    .populate<{ property: IProperty }>('property', 'name')
     .lean();
 
-  const messages = [ ...unreadMessage, ...readMessage ]
-    .map(messageDoc => {
-      const message = convertToSerializableObject(messageDoc);
-      message.sender = convertToSerializableObject(messageDoc.sender);
-      message.property = convertToSerializableObject(messageDoc.property);
-      return message;
-    });
+  const messages = [ ...unreadMessage, ...readMessage ] as unknown as (IMessage & { property: IProperty })[];
 
   return (
     <section className="bg-blue-50">
@@ -50,7 +46,10 @@ const MessagePage = async () => {
               <p>You have no messages</p>
             ) : ( 
               messages.map(message => (
-                <MessageCard key={message._id} message={message} />
+                <MessageCard
+                  key={message._id}
+                  message={message} 
+                />
               ))
             )}
           </div>

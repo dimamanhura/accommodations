@@ -1,3 +1,4 @@
+import { IProperty } from "@/models/property";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -9,24 +10,7 @@ import {
 } from "react-icons/fa";
 
 interface PropertyCardProps {
-  property: {
-    images: string[];
-    type: string;
-    name: string;
-    beds: number;
-    baths: number;
-    square_feet: number;
-    rates: {
-      weekly?: number;
-      monthly?: number;
-      nightly?: number;
-    },
-    location: {
-      city: string;
-      state: string;
-    },
-    _id: number;
-  };
+  property: IProperty;
 };
 
 const PropertyCard = ({ property }: PropertyCardProps) => {

@@ -1,6 +1,11 @@
 import updatePropertyAction from "@/actions/update-property";
+import { IProperty } from "@/models/property";
 
-const PropertyEditForm = ({ property }) => {
+interface PropertyEditFormProps {
+  property: IProperty;
+};
+
+const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
   const updatePropertyById = updatePropertyAction.bind(null, property._id);
   return (
     <form action={updatePropertyById}>

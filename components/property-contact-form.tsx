@@ -4,10 +4,15 @@ import { useActionState } from "react";
 import { useSession } from "next-auth/react";
 import addMessageAction from "@/actions/add-message";
 import SubmitMessageButton from "./submit-message-button";
+import { IProperty } from "@/models/property";
 
-const PropertyContactForm = ({ property }) => {
+interface PropertyContactFormProps {
+  property: IProperty;
+}
+
+const PropertyContactForm = ({ property }: PropertyContactFormProps) => {
   const session = useSession();
-  const [state, formAction] = useActionState(addMessageAction, {});
+  const [state, formAction] = useActionState(addMessageAction, { submitted: false, error: null });
 
   return session?.data?.user?.id && (
     <div className="bg-white p-6 rounded-lg shadow-md">
@@ -20,7 +25,7 @@ const PropertyContactForm = ({ property }) => {
       <h3 className="text-xl font-bold mb-6">Contact Property Manager</h3>
       <form action={formAction}>
         <input type="hidden" name="property" id="property" defaultValue={property._id} />
-        <input type="hidden" name="recipient" id="recipient" defaultValue={property.owner} />
+        <input type="hidden" name="recipient" id="recipient" defaultValue={property.owner.toString()} />
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"

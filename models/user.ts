@@ -1,9 +1,18 @@
-import { Schema, model, models } from 'mongoose';
+import { Schema, Types, model, models } from 'mongoose';
+export interface IUser {
+  sender: Types.ObjectId;
+  email: string;
+  username: string;
+  image: string;
+  bookmarks: Types.DocumentArray<Types.ObjectId>;
+  _id: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
-const UserSchema = new Schema({
+const UserSchema = new Schema<IUser>({
   email: {
     type: String,
-    unique: [true, 'Email already exist'],
     required: [true, 'Email is required'],
   },
   username: {
@@ -23,6 +32,6 @@ const UserSchema = new Schema({
   timestamps: true,
 });
 
-const User = models?.User || model('User', UserSchema);
+const User = models.User || model<IUser>('User', UserSchema);
 
 export default User;

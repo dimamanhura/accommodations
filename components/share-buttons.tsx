@@ -1,7 +1,6 @@
 import { FaShare } from "react-icons/fa";
 
-const ShareButtons = ({ property }) => {
-  const shareUrl = `${process.env.NEXT_PUBLIC_DOMAIN}/properties/${property._id}`;
+const ShareButtons = () => {
   return (
     <>
       <h1 className="text-xl font-bold text-center pt-2">Share This Property:</h1>

@@ -1,6 +1,36 @@
-import { Schema, model, models } from 'mongoose';
+import { Schema, Types, model, models } from 'mongoose';
 
-const PropertySchema = new Schema({
+export interface IProperty {
+  images: string[];
+  type: string;
+  name: string;
+  beds: number;
+  baths: number;
+  square_feet: number;
+  description: string;
+  owner: Types.ObjectId;
+  amenities: string[];
+  is_featured: boolean;
+  seller_info: {
+    name: string;
+    email: string;
+    phone: string;
+  },
+  rates: {
+    weekly?: number;
+    monthly?: number;
+    nightly?: number;
+  },
+  location: {
+    street: string;
+    city: string;
+    state: string;
+    zipcode: string;
+  },
+  _id: string;
+};
+
+const PropertySchema = new Schema<IProperty>({
   owner: {
     type: Schema.Types.ObjectId,
     ref: 'User',
@@ -63,6 +93,6 @@ const PropertySchema = new Schema({
   timestamps: true,
 });
 
-const Property = models?.Property || model('Property', PropertySchema);
+const Property = models.Property || model<IProperty>('Property', PropertySchema);
 
 export default Property;
