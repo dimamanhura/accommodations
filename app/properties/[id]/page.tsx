@@ -11,14 +11,13 @@ import connectDB from "@/db/database";
 import Property from "@/models/property";
 
 interface PropertyPageProps {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 };
 
 const PropertyPage = async ({ params }: PropertyPageProps) => {
   await connectDB();
-  const property = await Property.findById(params.id).lean();
+  const { id } = await params;
+  const property = await Property.findById(id).lean();
 
   if (!property) {
     return notFound();

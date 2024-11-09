@@ -1,5 +1,5 @@
-import { Document, Schema, Types, model, models } from 'mongoose';
-export interface IUser extends Document {
+import { Schema, Types, model, models } from 'mongoose';
+export interface IUser {
   sender: Types.ObjectId;
   email: string;
   username: string;

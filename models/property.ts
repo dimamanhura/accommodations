@@ -1,6 +1,6 @@
-import { Document, Schema, Types, model, models } from 'mongoose';
+import { Schema, Types, model, models } from 'mongoose';
 
-export interface IProperty extends Document {
+export interface IProperty {
   images: string[];
   type: string;
   name: string;

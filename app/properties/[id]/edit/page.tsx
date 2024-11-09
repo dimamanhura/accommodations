@@ -3,16 +3,16 @@ import connectDB from "@/db/database";
 import Property from "@/models/property";
 import { notFound } from "next/navigation";
 
-interface PropertyPageProps {
-  params: {
-    id: string;
-  };
+interface PropertyEditPageProps {
+  params: Promise<{ id: string }>;
 };
 
-const PropertyEditPage = async ({ params }: PropertyPageProps) => {
+const PropertyEditPage = async ({ params }: PropertyEditPageProps) => {
+  const { id } = await params;
+
   await connectDB();
 
-  const property = await Property.findById(params.id).lean();
+  const property = await Property.findById(id).lean();
 
   if (!property) {
     return notFound();
