@@ -38,7 +38,9 @@ const authOptions: NextAuthConfig = {
     async session({ session }) {
       await connectDB();
       const user = await User.findOne({ email: session?.user?.email });
-      session.user.id = user._id.toString();
+      if (user) {
+        session.user.id = user._id.toString();
+      }
       return session;
     },
     authorized: async ({ auth }) => {
