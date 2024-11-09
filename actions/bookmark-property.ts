@@ -3,6 +3,7 @@
 import { auth } from "@/auth";
 import connectDB from "@/db/database";
 import User from "@/models/user";
+import mongoose from "mongoose";
 import { revalidatePath } from "next/cache";
 
 async function bookmarkPropertyAction(propertyId: string) {
@@ -30,7 +31,7 @@ async function bookmarkPropertyAction(propertyId: string) {
     message = 'Bookmark Removed';
     isBookmarked = false;
   } else {
-    user.bookmarks.push(propertyId);
+    user.bookmarks.push(new mongoose.Types.ObjectId(propertyId));
     message = 'Bookmark Added';
     isBookmarked = true;
   }

@@ -1,4 +1,4 @@
-import { Schema, Types, model, models } from 'mongoose';
+import { Schema, Model, Types, model, models } from 'mongoose';
 
 export interface IProperty {
   images: string[];
@@ -93,6 +93,6 @@ const PropertySchema = new Schema<IProperty>({
   timestamps: true,
 });
 
-const Property = models.Property || model<IProperty>('Property', PropertySchema);
+const Property: Model<IProperty> = models.Property || model<IProperty>('Property', PropertySchema);
 
 export default Property;

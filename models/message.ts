@@ -1,4 +1,4 @@
-import { Schema, Types, model, models } from 'mongoose';
+import { Schema, Model, Types, model, models } from 'mongoose';
 
 export interface IMessage {
   sender: Types.ObjectId;
@@ -51,6 +51,6 @@ const MessageSchema = new Schema<IMessage>(
   },
 );
 
-const Message = models.Message || model<IMessage>('Message', MessageSchema);
+const Message: Model<IMessage> = models.Message || model<IMessage>('Message', MessageSchema);
 
 export default Message;
