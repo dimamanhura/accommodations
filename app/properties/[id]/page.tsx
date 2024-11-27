@@ -7,17 +7,15 @@ import PropertyDetails from "@/components/property-details";
 import BookmarkButton from "@/components/bookmark-button";
 import PropertyImages from "@/components/property-images";
 import ShareButtons from "@/components/share-buttons";
-import connectDB from "@/db/database";
-import Property from "@/models/property";
+import { db } from "@/db";
 
 interface PropertyPageProps {
   params: Promise<{ id: string }>;
 };
 
 const PropertyPage = async ({ params }: PropertyPageProps) => {
-  await connectDB();
   const { id } = await params;
-  const property = await Property.findById(id).lean();
+  const property = await db.property.findFirst({ where: { id }});
 
   if (!property) {
     return notFound();

@@ -1,6 +1,5 @@
 import PropertyEditForm from "@/components/property-edit-form";
-import connectDB from "@/db/database";
-import Property from "@/models/property";
+import { db } from "@/db";
 import { notFound } from "next/navigation";
 
 interface PropertyEditPageProps {
@@ -9,10 +8,7 @@ interface PropertyEditPageProps {
 
 const PropertyEditPage = async ({ params }: PropertyEditPageProps) => {
   const { id } = await params;
-
-  await connectDB();
-
-  const property = await Property.findById(id).lean();
+  const property = await db.property.findFirst({ where: { id }});
 
   if (!property) {
     return notFound();

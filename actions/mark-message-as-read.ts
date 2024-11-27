@@ -1,35 +1,38 @@
 'use server';
 
 import { auth } from "@/auth";
-import connectDB from "@/db/database";
-import Message from "@/models/message";
+import { db } from "@/db";
 import { revalidatePath } from "next/cache";
 
 async function markMessageAsRead(messageId: string) {
-  await connectDB();
-
   const session = await auth();
 
   if (!session?.user || !session?.user?.id) {
     throw new Error('User ID is required');
   }
 
-  const message = await Message.findById(messageId);
+  const message = await db.message.findFirst({ where: { id: messageId } });
 
   if (!message) {
     throw new Error('Message not found');
   }
 
-  if (message.recipient.toString() !== session?.user?.id) {
+  if (message.recipientId !== session?.user?.id) {
     throw new Error('Unauthorized');
   }
 
-  message.read = !message.read;
-  await message.save();
+  await db.message.update({ 
+    data: {
+      read: !message.read,
+    },
+    where: {
+      id: messageId,
+    },
+  });
 
   revalidatePath('/messages', 'page');
 
-  return message.read;
+  return !message.read;
 };
 
 export default markMessageAsRead;

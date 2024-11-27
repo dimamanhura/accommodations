@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = []
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+type Seller {
+  name      String
+  email     String
+  phone     String
+}
+
+type Rates {
+  weekly      Int
+  monthly     Int
+  nightly     Int
+}
+
+type Location {
+  street    String
+  city      String
+  state     String
+  zip       String
+}
+
+model Message {
+  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  sender          User @relation("SentMessages", fields: [senderId], references: [id])
+  senderId        String  @db.ObjectId
+  recipient       User @relation("ReceivedMessages", fields: [recipientId], references: [id])
+  recipientId     String  @db.ObjectId
+  property        Property @relation(fields: [propertyId], references: [id])
+  propertyId      String  @db.ObjectId
+  name            String
+  email           String
+  phone           String
+  body            String
+  read            Boolean @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Property {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  images        String[]
+  type          String
+  name          String
+  beds          Int
+  baths         Int
+  squareFeet    Int
+  description   String
+  owner         User @relation(fields: [ownerId], references: [id])
+  ownerId       String @db.ObjectId
+  amenities     String[]
+  isFeatured    Boolean @default(false)
+  seller        Seller
+  rates         Rates
+  location      Location
+  messages      Message[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model User {
+  id                  String @id @default(auto()) @map("_id") @db.ObjectId
+  username            String
+  email               String
+  image               String
+  bookmarks           Property[]
+  sentMessages        Message[] @relation("SentMessages")
+  receivedMessages    Message[] @relation("ReceivedMessages")
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}

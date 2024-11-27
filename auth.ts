@@ -1,7 +1,6 @@
 import NextAuth, { NextAuthConfig } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-import connectDB from '@/db/database';
-import User from '@/models/user';
+import { db } from './db';
 
 const authOptions: NextAuthConfig = {
   session: {
@@ -22,24 +21,37 @@ const authOptions: NextAuthConfig = {
   ],
   callbacks: {
     async signIn({ profile }) {
-      await connectDB();
-      const userExists = await User.findOne({ email: profile?.email });
+      if (!profile) {
+        return false;
+      } 
+    
+      const userExists = await db.user.findFirst({
+        where: {
+          email: (profile?.email) as unknown as string,
+        },
+      });
 
       if (!userExists) {
-        await User.create({
-          email: profile?.email,
-          username: profile?.name,
-          image: profile?.picture,
+        await db.user.create({
+          data: {
+            username: (profile?.name) as unknown as string,
+            image: profile?.picture,
+            email: (profile?.email) as unknown as string,
+          },
         });
       }
     
       return true;
     },
     async session({ session }) {
-      await connectDB();
-      const user = await User.findOne({ email: session?.user?.email });
+      const user = await db.user.findFirst({
+        where: {
+          email: session?.user?.email
+        },
+      });
+    
       if (user) {
-        session.user.id = user._id.toString();
+        session.user.id = user.id;
       }
       return session;
     },

@@ -1,23 +1,19 @@
 import Pagination from '@/components/pagination';
 import PropertyCard from '@/components/property-card';
-import connectDB from '@/db/database';
-import Property from '@/models/property';
+import { db } from '@/db';
 
 interface PropertiesPageProps {
   searchParams: Promise<{ pageSize?: string; page?: string; }>,
 }
 
 const PropertiesPage = async ({ searchParams }: PropertiesPageProps) => {
-  await connectDB();
-
   const { pageSize = '3', page = '1' } = await searchParams;
   const skip = (parseInt(page) - 1) * parseInt(pageSize);
-  const total = await Property.countDocuments({});
-  const properties = await Property
-    .find({})
-    .skip(skip)
-    .limit(parseInt(pageSize))
-    .lean();
+  const total = await db.property.count();
+  const properties = await db.property.findMany({
+    skip: skip,
+    take: parseInt(pageSize),
+  });
 
   return (
     <section className='px-4 py-6'>
@@ -28,7 +24,7 @@ const PropertiesPage = async ({ searchParams }: PropertiesPageProps) => {
           <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
             {
               properties.map(property => (
-                <PropertyCard key={property._id} property={property} />
+                <PropertyCard key={property.id} property={property} />
               ))
             }
           </div>

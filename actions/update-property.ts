@@ -1,23 +1,21 @@
 'use server';
 
 import { auth } from "@/auth";
-import connectDB from "@/db/database";
-import Property from "@/models/property";
+import { db } from "@/db";
+import { Property } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 async function updatePropertyAction(propertyId: string, formData: FormData) {
-  await connectDB();
-
   const session = await auth();
 
   if (!session?.user || !session?.user?.id) {
     throw new Error('User ID is required');
   }
 
-  const existingProperty = await Property.findById(propertyId);
+  const existingProperty = await db.property.findFirst({ where: { id: propertyId } });
 
-  if (existingProperty?.owner.toString() !== session.user.id) {
+  if (existingProperty?.ownerId !== session.user.id) {
     throw new Error('Unauthorized');
   }
 
@@ -31,24 +29,29 @@ async function updatePropertyAction(propertyId: string, formData: FormData) {
       street: formData.get('location.street'),
       city: formData.get('location.city'),
       state: formData.get('location.state'),
-      zipcode: formData.get('location.zipcode'),
+      zip: formData.get('location.zip'),
     },
     beds: formData.get('beds'),
     baths: formData.get('baths'),
-    square_feet: formData.get('square_feet'),
+    squareFeet: formData.get('squareFeet'),
     rates: {
       nightly: formData.get('rates.nightly'),
       weekly: formData.get('rates.weekly'),
       monthly: formData.get('rates.monthly'),
     },
-    seller_info: {
-      name: formData.get('seller_info.name'),
-      email: formData.get('seller_info.email'),
-      phone: formData.get('seller_info.phone'),
+    seller: {
+      name: formData.get('seller.name'),
+      email: formData.get('seller.email'),
+      phone: formData.get('seller.phone'),
     },
   };
 
-  await Property.findByIdAndUpdate(propertyId, propertyData);
+  await db.property.update({
+    data: propertyData as unknown as Property,
+    where: {
+      id: propertyId,
+    },
+  });
 
   revalidatePath('/', 'layout');
   redirect(`/properties/${propertyId}`);

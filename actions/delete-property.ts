@@ -1,31 +1,28 @@
 'use server';
 
 import { auth } from "@/auth";
-import connectDB from "@/db/database";
-import Property from "@/models/property";
 import { revalidatePath } from "next/cache";
 import cloudinary from "@/cloudinary";
+import { db } from "@/db";
 
 async function deletePropertyAction(propertyId: string) {
-  await connectDB();
-
   const session = await auth();
 
   if (!session?.user || !session?.user?.id) {
     throw new Error('User ID is required');
   }
 
-  const property = await Property.findById(propertyId);
+  const property = await db.property.findFirst({ where: { id: propertyId } });
 
   if (!property) {
     throw new Error('Property No Found');
   }
 
-  if (property.owner.toString() !== session.user.id.toString()) {
+  if (property.ownerId !== session.user.id) {
     throw new Error('Unauthorized');
   }
 
-  await property.deleteOne();
+  await db.property.delete({ where: { id: propertyId } })
 
   const publicIds = property.images.map((imageUrl: string) => {
     const parts = imageUrl.split('/');

@@ -1,21 +1,26 @@
 import { auth } from "@/auth";
 import PropertyCard from "@/components/property-card";
-import connectDB from "@/db/database";
-import { IProperty } from "@/models/property";
-import User from "@/models/user";
+import { db } from "@/db";
 import { notFound } from "next/navigation";
 
 const SavedPropertiesPage = async () => {
-  await connectDB();
-
   const session = await auth();
 
-  const user = await User
-    .findById(session?.user?.id)
-    .populate<{ bookmarks: IProperty[] }>('bookmarks');
+  if (!session?.user?.id) {
+    return notFound();
+  }
+
+  const user = await db.user.findFirst({
+    where: {
+      id: session.user.id,
+    },
+    include: {
+      bookmarks: {},
+    }
+  });
 
   if (!user) {
-    notFound();
+    return notFound();
   }
 
   const { bookmarks } = user;
@@ -31,7 +36,7 @@ const SavedPropertiesPage = async () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {
                 bookmarks.map((property) => (
-                  <PropertyCard property={property} key={property._id} />
+                  <PropertyCard property={property} key={property.id} />
                 ))
               }
             </div>

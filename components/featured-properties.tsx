@@ -1,11 +1,12 @@
-import connectDB from "@/db/database";
-import Property from "@/models/property";
 import FeaturedPropertyCard from "./featured-property-card";
+import { db } from "@/db";
 
 const FeaturedProperties = async () => {
-  await connectDB();
-
-  const properties = await Property.find({ is_featured: true }).lean();
+  const properties = await db.property.findMany({
+    where: {
+      isFeatured: true,
+    }
+  });
 
   return properties.length > 0 ? (
     <section className="bg-blue-50 px-4 pt-6 pb-10">
@@ -17,7 +18,7 @@ const FeaturedProperties = async () => {
           {properties.map(property => (
             <FeaturedPropertyCard
               property={property}
-              key={property._id.toString()}
+              key={property.id}
             />
           ))}
         </div>

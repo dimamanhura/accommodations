@@ -1,4 +1,4 @@
-import { IProperty } from "@/models/property";
+import { Property } from "@prisma/client";
 import {
   FaRulerCombined,
   FaMapMarked,
@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 
 interface PropertyDetailsProps {
-  property: IProperty;
+  property: Property;
 };
 
 const PropertyDetails = ({ property }: PropertyDetailsProps) => {
@@ -21,7 +21,7 @@ const PropertyDetails = ({ property }: PropertyDetailsProps) => {
         <div className="text-gray-500 mb-4 flex align-middle justify-center md:justify-start">
           <FaMapMarked className="text-orange-700 mr-1 mt-1" />
           <p className="text-orange-700">
-            {property.location.street} {property.location.city}, {property.location.state} {property.location.zipcode}
+            {property.location.street} {property.location.city}, {property.location.state} {property.location.zip}
           </p>
         </div>
 
@@ -70,7 +70,7 @@ const PropertyDetails = ({ property }: PropertyDetailsProps) => {
             <span className="hidden sm:inline">Baths</span>
           </p>
           <p>
-            <FaRulerCombined className="inline-block mr-2" /> {property.square_feet}
+            <FaRulerCombined className="inline-block mr-2" /> {property.squareFeet}
             <span className="hidden sm:inline">sqft</span>
           </p>
         </div>

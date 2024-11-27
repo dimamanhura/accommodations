@@ -13,7 +13,7 @@
     },
     "beds": 2,
     "baths": 1,
-    "square_feet": 1500,
+    "squareFeet": 1500,
     "amenities": [
       "Wifi",
       "Full kitchen",
@@ -34,13 +34,13 @@
       "weekly": 1100,
       "monthly": 4200
     },
-    "seller_info": {
+    "seller": {
       "name": "John Doe",
       "email": "john@gmail.com",
       "phone": "617-555-5555"
     },
     "images": ["a1.jpg", "a2.jpg", "a3.jpg"],
-    "is_featured": false,
+    "isFeatured": false,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z"
   },
@@ -58,7 +58,7 @@
     },
     "beds": 1,
     "baths": 1,
-    "square_feet": 1800,
+    "squareFeet": 1800,
     "amenities": [
       "Wifi",
       "Full kitchen",
@@ -78,13 +78,13 @@
       "weekly": 1000,
       "monthly": 4000
     },
-    "seller_info": {
+    "seller": {
       "name": "Jane Smith",
       "email": "jane@gmail.com",
       "phone": "212-555-5555"
     },
     "images": ["b1.jpg", "b2.jpg", "b3.jpg"],
-    "is_featured": false,
+    "isFeatured": false,
     "createdAt": "2024-01-02T00:00:00.000Z",
     "updatedAt": "2024-01-02T00:00:00.000Z"
   },
@@ -102,7 +102,7 @@
     },
     "beds": 3,
     "baths": 2,
-    "square_feet": 2200,
+    "squareFeet": 2200,
     "amenities": [
       "Wifi",
       "Full kitchen",
@@ -124,13 +124,13 @@
       "weekly": 750,
       "monthly": 3300
     },
-    "seller_info": {
+    "seller": {
       "name": "David Johnson",
       "email": "david@gmail.com",
       "phone": "213-555-5555"
     },
     "images": ["c1.jpg", "c2.jpg", "c3.jpg"],
-    "is_featured": false,
+    "isFeatured": false,
     "createdAt": "2024-01-03T00:00:00.000Z",
     "updatedAt": "2024-01-03T00:00:00.000Z"
   },
@@ -148,7 +148,7 @@
     },
     "beds": 1,
     "baths": 1,
-    "square_feet": 900,
+    "squareFeet": 900,
     "amenities": [
       "Fireplace",
       "Outdoor Grill/BBQ",
@@ -158,13 +158,13 @@
     "rates": {
       "weekly": 2000
     },
-    "seller_info": {
+    "seller": {
       "name": "Emily Davis",
       "email": "emily@gmail.com",
       "phone": "512-555-5555"
     },
     "images": ["d1.jpg", "d2.jpg", "d3.jpg"],
-    "is_featured": false,
+    "isFeatured": false,
     "createdAt": "2024-01-04T00:00:00.000Z",
     "updatedAt": "2024-01-04T00:00:00.000Z"
   },
@@ -182,7 +182,7 @@
     },
     "beds": 1,
     "baths": 1,
-    "square_feet": 900,
+    "squareFeet": 900,
     "amenities": [
       "High-Speed Internet",
       "Smart TV",
@@ -194,13 +194,13 @@
       "weekly": 1100,
       "monthly": 4200
     },
-    "seller_info": {
+    "seller": {
       "name": "Michael Brown",
       "email": "michael@gmail.com",
       "phone": "312-555-5555"
     },
     "images": ["e1.jpg", "e2.jpg", "e3.jpg"],
-    "is_featured": true,
+    "isFeatured": true,
     "createdAt": "2024-01-05T00:00:00.000Z",
     "updatedAt": "2024-01-05T00:00:00.000Z"
   },
@@ -218,7 +218,7 @@
     },
     "beds": 4,
     "baths": 3,
-    "square_feet": 2800,
+    "squareFeet": 2800,
     "amenities": [
       "Beach Access",
       "Swimming Pool",
@@ -230,13 +230,13 @@
       "nightly": 500,
       "weekly": 2500
     },
-    "seller_info": {
+    "seller": {
       "name": "Sarah Wilson",
       "email": "sarah@gmail.com",
       "phone": "305-555-5555"
     },
     "images": ["f1.jpg", "f2.jpg", "f3.jpg"],
-    "is_featured": true,
+    "isFeatured": true,
     "createdAt": "2024-01-06T00:00:00.000Z",
     "updatedAt": "2024-01-06T00:00:00.000Z"
   },
@@ -254,7 +254,7 @@
     },
     "beds": 2,
     "baths": 1,
-    "square_feet": 1100,
+    "squareFeet": 1100,
     "amenities": [
       "Fireplace",
       "Outdoor Grill/BBQ",
@@ -265,13 +265,13 @@
       "nightly": 475,
       "weekly": 2000
     },
-    "seller_info": {
+    "seller": {
       "name": "Robert Anderson",
       "email": "robert@gmail.com",
       "phone": "303-555-5555"
     },
     "images": ["g1.jpg", "g2.jpg", "g3.jpg"],
-    "is_featured": false,
+    "isFeatured": false,
     "createdAt": "2024-01-07T00:00:00.000Z",
     "updatedAt": "2024-01-07T00:00:00.000Z"
   },
@@ -289,7 +289,7 @@
     },
     "beds": 3,
     "baths": 2,
-    "square_feet": 1800,
+    "squareFeet": 1800,
     "amenities": [
       "Ski Equipment Storage",
       "Fireplace",
@@ -300,13 +300,13 @@
       "nightly": 300,
       "weekly": 1100
     },
-    "seller_info": {
+    "seller": {
       "name": "Jennifer Martin",
       "email": "jennifer@gmail.com",
       "phone": "970-555-5555"
     },
     "images": ["h1.jpg", "h2.jpg", "h3.jpg"],
-    "is_featured": false,
+    "isFeatured": false,
     "createdAt": "2024-01-08T00:00:00.000Z",
     "updatedAt": "2024-01-08T00:00:00.000Z"
   },
@@ -324,7 +324,7 @@
     },
     "beds": 4,
     "baths": 3,
-    "square_feet": 2400,
+    "squareFeet": 2400,
     "amenities": [
       "Mountain View",
       "Hiking Trails Access",
@@ -336,13 +336,13 @@
       "weekly": 1000,
       "monthly": 3800
     },
-    "seller_info": {
+    "seller": {
       "name": "Lisa Taylor",
       "email": "lisa@gmail.com",
       "phone": "303-555-5555"
     },
     "images": ["i1.jpg", "i2.jpg", "i3.jpg"],
-    "is_featured": false,
+    "isFeatured": false,
     "createdAt": "2024-01-09T00:00:00.000Z",
     "updatedAt": "2024-01-09T00:00:00.000Z"
   },
@@ -360,7 +360,7 @@
     },
     "beds": 2,
     "baths": 1,
-    "square_feet": 1200,
+    "squareFeet": 1200,
     "amenities": [
       "High-Speed Internet",
       "Air Conditioning",
@@ -371,13 +371,13 @@
       "weekly": 550,
       "monthly": 2100
     },
-    "seller_info": {
+    "seller": {
       "name": "Matthew Harris",
       "email": "matthew@gmail.com",
       "phone": "215-555-5555"
     },
     "images": ["j1.jpg", "j2.jpg", "j3.jpg"],
-    "is_featured": false,
+    "isFeatured": false,
     "createdAt": "2024-01-10T00:00:00.000Z",
     "updatedAt": "2024-01-10T00:00:00.000Z"
   }

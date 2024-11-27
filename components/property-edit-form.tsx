@@ -1,12 +1,12 @@
 import updatePropertyAction from "@/actions/update-property";
-import { IProperty } from "@/models/property";
+import { Property } from "@prisma/client";
 
 interface PropertyEditFormProps {
-  property: IProperty;
+  property: Property;
 };
 
 const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
-  const updatePropertyById = updatePropertyAction.bind(null, property._id);
+  const updatePropertyById = updatePropertyAction.bind(null, property.id);
   return (
     <form action={updatePropertyById}>
       <h2 className="text-3xl text-center font-semibold mb-6">
@@ -89,11 +89,11 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
         />
         <input
           type="text"
-          id="zipcode"
-          name="location.zipcode"
+          id="zip"
+          name="location.zip"
           className="border rounded w-full py-2 px-3 mb-2"
-          defaultValue={property.location.zipcode}
-          placeholder="Zipcode"
+          defaultValue={property.location.zip}
+          placeholder="ZIP Code"
         />
       </div>
 
@@ -125,14 +125,14 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
           />
         </div>
         <div className="w-full sm:w-1/3 pl-2">
-          <label htmlFor="square_feet" className="block text-gray-700 font-bold mb-2">
+          <label htmlFor="squareFeet" className="block text-gray-700 font-bold mb-2">
             Square Feet
           </label>
           <input
             type="number"
-            id="square_feet"
-            name="square_feet"
-            defaultValue={property.square_feet}
+            id="squareFeet"
+            name="squareFeet"
+            defaultValue={property.squareFeet}
             className="border rounded w-full py-2 px-3"
             required
           />
@@ -363,9 +363,9 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
         <input
           type="text"
           id="seller_name"
-          name="seller_info.name"
+          name="seller.name"
           className="border rounded w-full py-2 px-3"
-          defaultValue={property.seller_info.name}
+          defaultValue={property.seller.name}
           placeholder="Name"
         />
       </div>
@@ -376,9 +376,9 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
         <input
           type="email"
           id="seller_email"
-          name="seller_info.email"
+          name="seller.email"
           className="border rounded w-full py-2 px-3"
-          defaultValue={property.seller_info.email}
+          defaultValue={property.seller.email}
           placeholder="Email address"
           required
         />
@@ -390,9 +390,9 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
         <input
           type="tel"
           id="seller_phone"
-          name="seller_info.phone"
+          name="seller.phone"
           className="border rounded w-full py-2 px-3"
-          defaultValue={property.seller_info.phone}
+          defaultValue={property.seller.phone}
           placeholder="Phone"
         />
       </div>

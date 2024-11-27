@@ -1,16 +1,17 @@
 import PropertyCard from '@/components/property-card';
-import connectDB from '@/db/database';
-import Property from '@/models/property';
+import { db } from '@/db';
 import Link from 'next/link';
 
 const HomeProperties = async () => {
-  await connectDB();
-
-  const recentProperties = await Property
-    .find({})
-    .sort({ createdAt: -1 })
-    .limit(3)
-    .lean();
+  const recentProperties = await db.property
+    .findMany({
+      take: 3,
+      orderBy: [
+        {
+          createdAt: 'desc',
+        },
+      ],
+    });
 
   return (
     <>
@@ -25,7 +26,7 @@ const HomeProperties = async () => {
             <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
               {
                 recentProperties.map(property => (
-                  <PropertyCard key={property._id} property={property} />
+                  <PropertyCard key={property.id} property={property} />
                 ))
               }
             </div>

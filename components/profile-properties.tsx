@@ -4,10 +4,10 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import deletePropertyAction from "@/actions/delete-property";
-import { IProperty } from "@/models/property";
+import { Property } from "@prisma/client";
 
 interface ProfilePropertiesProps {
-  initialProperties: IProperty[];
+  initialProperties: Property[];
 };
 
 const ProfileProperties = ({ initialProperties }: ProfilePropertiesProps) => {
@@ -22,13 +22,13 @@ const ProfileProperties = ({ initialProperties }: ProfilePropertiesProps) => {
 
     deletePropertyAction(propertyId);
 
-    const updatedProperties = properties.filter(property => property._id !== propertyId);
+    const updatedProperties = properties.filter(property => property.id !== propertyId);
     setProperties(updatedProperties);
   }
 
   return properties.map(property => (
-    <div className="mb-10" key={property._id}>
-      <Link href={`/properties/${property._id}`}>
+    <div className="mb-10" key={property.id}>
+      <Link href={`/properties/${property.id}`}>
         <Image
           className="h-32 w-full rounded-md object-cover"
           src={property.images[0]}
@@ -43,7 +43,7 @@ const ProfileProperties = ({ initialProperties }: ProfilePropertiesProps) => {
       </div>
       <div className="mt-2">
         <Link
-          href={`/properties/${property._id}/edit`}
+          href={`/properties/${property.id}/edit`}
           className="bg-blue-500 text-white px-3 py-3 rounded-md mr-2 hover:bg-blue-600"
         >
           Edit
@@ -51,7 +51,7 @@ const ProfileProperties = ({ initialProperties }: ProfilePropertiesProps) => {
         <button
           className="bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600"
           type="button"
-          onClick={() => handleDeleteProperty(property._id)}
+          onClick={() => handleDeleteProperty(property.id)}
         >
           Delete
         </button>

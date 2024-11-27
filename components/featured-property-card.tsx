@@ -1,6 +1,6 @@
+import { Property } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
-import { IProperty } from "@/models/property";
 import {
   FaRulerCombined,
   FaMoneyBill,
@@ -10,7 +10,7 @@ import {
 } from "react-icons/fa";
 
 interface PropertyCardProps {
-  property: IProperty;
+  property: Property;
 };
 
 const FeaturedPropertyCard = ({ property }:PropertyCardProps) => {
@@ -58,7 +58,7 @@ const FeaturedPropertyCard = ({ property }:PropertyCardProps) => {
             <span className="md:hidden lg:inline">Baths</span>
           </p>
           <p>
-            <FaRulerCombined className="inline-block mr-2" /> {property.square_feet}
+            <FaRulerCombined className="inline-block mr-2" /> {property.squareFeet}
             <span className="md:hidden lg:inline">sqft</span>
           </p>
         </div>
@@ -94,7 +94,7 @@ const FeaturedPropertyCard = ({ property }:PropertyCardProps) => {
             </span>
           </div>
           <Link
-            href={`/properties/${property._id}`}
+            href={`/properties/${property.id}`}
             className="h-[36px] bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-center text-sm"
           >
             Details

@@ -5,10 +5,10 @@ import { useSession } from "next-auth/react";
 import { FaBookmark } from "react-icons/fa";
 import bookmarkPropertyAction from "@/actions/bookmark-property";
 import checkBookmarkStatus from "@/actions/check-bookmark-status";
-import { IProperty } from "@/models/property";
+import { Property } from "@prisma/client";
 
 interface BookmarkButtonProps {
-  property: IProperty;
+  property: Property;
 }
 
 const BookmarkButton = ({ property }: BookmarkButtonProps) => {
@@ -21,7 +21,7 @@ const BookmarkButton = ({ property }: BookmarkButtonProps) => {
     if (!session?.data?.user?.id) {
       alert('You need to be signed in to bookmark a listing')
     } else {
-      const response = await bookmarkPropertyAction(property._id.toString());
+      const response = await bookmarkPropertyAction(property.id);
       setIsBookmarked(response.isBookmarked);
       alert(response.message);
     }
@@ -33,11 +33,11 @@ const BookmarkButton = ({ property }: BookmarkButtonProps) => {
       return;
     }
 
-    checkBookmarkStatus(property._id.toString()).then((res) => {
+    checkBookmarkStatus(property.id).then((res) => {
       setIsBookmarked(res.isBookmarked);
       setIsLoading(false);
     });
-  }, [property._id, session?.data?.user?.id]);
+  }, [property.id, session?.data?.user?.id]);
 
   if (isLoading) {
     return (<p className="text-center">Loading...</p>);

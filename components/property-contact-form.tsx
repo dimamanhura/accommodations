@@ -2,17 +2,17 @@
 
 import { useActionState } from "react";
 import { useSession } from "next-auth/react";
-import addMessageAction from "@/actions/add-message";
+import addMessage from "@/actions/add-message";
 import SubmitMessageButton from "./submit-message-button";
-import { IProperty } from "@/models/property";
+import { Property } from "@prisma/client";
 
 interface PropertyContactFormProps {
-  property: IProperty;
+  property: Property;
 }
 
 const PropertyContactForm = ({ property }: PropertyContactFormProps) => {
   const session = useSession();
-  const [state, formAction] = useActionState(addMessageAction, { submitted: false, error: null });
+  const [state, formAction] = useActionState(addMessage, { submitted: false, error: null });
 
   return session?.data?.user?.id && (
     <div className="bg-white p-6 rounded-lg shadow-md">
@@ -24,8 +24,8 @@ const PropertyContactForm = ({ property }: PropertyContactFormProps) => {
       )}
       <h3 className="text-xl font-bold mb-6">Contact Property Manager</h3>
       <form action={formAction}>
-        <input type="hidden" name="property" id="property" defaultValue={property._id} />
-        <input type="hidden" name="recipient" id="recipient" defaultValue={property.owner.toString()} />
+        <input type="hidden" name="propertyId" id="propertyId" defaultValue={property.id} />
+        <input type="hidden" name="recipientId" id="recipientId" defaultValue={property.ownerId} />
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"

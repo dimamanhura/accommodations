@@ -2,32 +2,41 @@ import { FaArrowAltCircleLeft } from "react-icons/fa";
 import Link from "next/link";
 import PropertySearchForm from "@/components/property-search-form";
 import PropertyCard from "@/components/property-card";
-import connectDB from "@/db/database";
-import Property from "@/models/property";
+import { db } from "@/db";
 
 interface SearchResultsPageProps {
   searchParams: Promise<{ propertyType?: string; location: string; }>;
 };
 
 const SearchResultsPage = async ({ searchParams }: SearchResultsPageProps) => {
-  await connectDB();
   const { location, propertyType } = await searchParams;
-  const locationPattern = new RegExp(location, 'i');
-  const query = {
-    query: propertyType && propertyType !== 'All' 
-      ? new RegExp(propertyType, 'i')
-      : undefined,
-    $or: [
-      { name: locationPattern },
-      { description: locationPattern },
-      { 'location.street': locationPattern },
-      { 'location.city': locationPattern },
-      { 'location.state': locationPattern },
-      { 'location.zipcode': locationPattern },
-    ],
-  };
+  const properties = await db.property.findMany({
+    where: {
+      type: {
+        contains: propertyType && propertyType !== 'All'
+          ? propertyType
+          : '',
+        mode: 'insensitive',
+      },
+      OR: [
+        {
+          name: {
+            contains: location,
+            mode: 'insensitive',
+          },
+          description: {
+            contains: location,
+             mode: 'insensitive',
+          },
 
-  const properties = await Property.find(query).lean();
+        },
+        // { 'location.street': locationPattern },
+        // { 'location.city': locationPattern },
+        // { 'location.state': locationPattern },
+        // { 'location.zip': locationPattern },
+      ],
+    }
+  });
 
   return (
     <>
@@ -50,7 +59,7 @@ const SearchResultsPage = async ({ searchParams }: SearchResultsPageProps) => {
                 properties.map(property => (
                   <PropertyCard
                     property={property}
-                    key={property._id}
+                    key={property.id}
                   />
                 ))
               }

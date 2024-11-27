@@ -1,11 +1,9 @@
 'use server';
 
 import { auth } from "@/auth";
-import connectDB from "@/db/database";
-import User from "@/models/user";
+import { db } from "@/db";
 
 async function checkBookmarkStatus(propertyId: string) {
-  await connectDB();
 
   const session = await auth();
 
@@ -13,14 +11,23 @@ async function checkBookmarkStatus(propertyId: string) {
     throw new Error('User ID is required');
   }
 
-  const user = await User.findById(session.user.id);
+  const user = await db.user.findFirst({
+    where: {
+      id: session.user.id,
+    },
+    include: {
+      bookmarks: {
+
+      },
+    },
+  });
 
   if (!user) {
      throw new Error('User ID is required');
   }
 
   const isBookmarked = user.bookmarks
-    .map(bookmark => bookmark.toString())
+    .map(bookmark => bookmark.id)
     .includes(propertyId);
 
   return { isBookmarked };

@@ -4,11 +4,11 @@ import { useState } from "react";
 import markMessageAsRead from "@/actions/mark-message-as-read";
 import deleteMessage from "@/actions/delete-message";
 import { useGlobalContext } from "@/context/global-context";
-import { IMessage } from "@/models/message";
-import { IProperty } from "@/models/property";
+import { Message } from "postcss";
+import { Property } from "@prisma/client";
 
 interface MessageCardProps {
-  message: IMessage & { property: IProperty };
+  message: Message & { property: Property };
 }
 
 const MessageCard = ({ message }: MessageCardProps) => {

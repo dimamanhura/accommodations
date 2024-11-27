@@ -20,7 +20,6 @@ export function GlobalProvider({ children }: GlobalProviderProps) {
   const session = useSession();
   const [unreadCount, setUnreadCount] = useState<number>(0);
 
-
   useEffect(() => {
     if (session?.data?.user?.id) {
       getUnreadMessageCount().then(setUnreadCount)

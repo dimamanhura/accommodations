@@ -1,11 +1,39 @@
 'use server';
 
-import { auth } from "@/auth";
-import connectDB from "@/db/database";
-import Property from "@/models/property";
+import { z } from 'zod';
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import cloudinary from "@/cloudinary";
+import { auth } from "@/auth";
+import { db } from "@/db";
+
+const propertySchema = z.object({
+  description: z.string().min(3).max(1000),
+  amenities: z.array(z.string()),
+  ownerId: z.string(),
+  type: z.string().min(3).max(255),
+  name: z.string().min(3).max(255),
+  squareFeet: z.number().positive().min(1),
+  beds: z.number().positive().min(1),
+  baths: z.number().positive().min(1),
+  location: z.object({
+    street: z.string().min(3).max(255),
+    state: z.string().min(3).max(255),
+    city: z.string().min(3).max(255),
+    zip: z.string().min(3).max(255),
+  }),
+  rates: z.object({
+    nightly: z.number().positive().min(1), 
+    weekly: z.number().positive().min(1),
+    monthly: z.number().positive().min(1),
+  }),
+  seller: z.object({
+    phone: z.string().min(3).max(255),
+    email: z.string().email().min(3).max(255),
+    name: z.string().min(3).max(255),
+  }),
+  images: z.array(z.string()).min(3).max(10),
+});
 
 const getImageUrls = async (images: File[]) => {
   const imageUrls = [];
@@ -24,9 +52,7 @@ const getImageUrls = async (images: File[]) => {
   return imageUrls;
 };
 
-async function addPropertyAction(formData: FormData) {
-  await connectDB();
-
+async function addProperty(formData: FormData) {
   const session = await auth();
 
   if (!session?.user || !session?.user?.id) {
@@ -37,39 +63,45 @@ async function addPropertyAction(formData: FormData) {
   const images = (formData.getAll('images') as File[]).filter((image) => image.name !== '');
   const imageUrls = await getImageUrls(images);
 
-  const propertyData = {
+  const result = propertySchema.safeParse({
     amenities,
-    owner: session.user.id,
+    ownerId: session.user.id,
     type: formData.get('type'),
     name: formData.get('name'),
     description: formData.get('description'),
     location: {
       street: formData.get('location.street'),
-      city: formData.get('location.city'),
       state: formData.get('location.state'),
-      zipcode: formData.get('location.zipcode'),
+      city: formData.get('location.city'),
+      zip: formData.get('location.zip'),
     },
-    beds: formData.get('beds'),
-    baths: formData.get('baths'),
-    square_feet: formData.get('square_feet'),
+    beds: parseInt(formData.get('beds') as string),
+    baths: parseInt(formData.get('baths') as string),
+    squareFeet: parseInt(formData.get('squareFeet') as string),
     rates: {
-      nightly: formData.get('rates.nightly'),
-      weekly: formData.get('rates.weekly'),
-      monthly: formData.get('rates.monthly'),
+      nightly: parseInt(formData.get('rates.nightly') as string), 
+      weekly: parseInt(formData.get('rates.weekly') as string),
+      monthly: parseInt(formData.get('rates.monthly') as string),
     },
-    seller_info: {
-      name: formData.get('seller_info.name'),
-      email: formData.get('seller_info.email'),
-      phone: formData.get('seller_info.phone'),
+    seller: {
+      phone: formData.get('seller.phone'),
+      email: formData.get('seller.email'),
+      name: formData.get('seller.name'),
     },
     images: imageUrls,
-  };
+  });
 
-  const newProperty = new Property(propertyData);
-  await newProperty.save();
+  
+  if (!result.success) {
+    throw new Error('Invalid data');
+  }
+
+  const newProperty = await db.property.create({
+    data: result.data,
+  });
 
   revalidatePath('/', 'layout');
-  redirect(`/properties/${newProperty._id}`);
+  redirect(`/properties/${newProperty.id}`);
 };
 
-export default addPropertyAction;
+export default addProperty;

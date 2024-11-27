@@ -1,20 +1,18 @@
 import Image from "next/image";
-import connectDB from "@/db/database";
-import Property from "@/models/property";
 import { auth } from "@/auth";
 import profileDefault from '@/assets/images/profile.png';
 import { notFound } from "next/navigation";
 import ProfileProperties from "@/components/profile-properties";
+import { fetchUserProperties } from "@/db/queries/properties";
 
 const ProfilePage = async () => {
-  await connectDB();
   const session = await auth();
 
   if (!session?.user?.id) {
     return notFound();
   }
 
-  const properties = await Property.find({ owner: session.user.id }).lean();
+  const properties = await fetchUserProperties(session.user.id);
 
   return (
     <section className="bg-blue-50">

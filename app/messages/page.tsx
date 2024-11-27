@@ -1,40 +1,19 @@
-import connectDB from "@/db/database";
-import Message, { IMessage } from "@/models/message";
 import { auth } from "@/auth";
 import MessageCard from "@/components/message-card";
-import { IUser } from "@/models/user";
-import { IProperty } from "@/models/property";
+import { fetchMessages } from "@/db/queries/messages";
+import { notFound } from "next/navigation";
 
 const MessagePage = async () => {
-  await connectDB();
-
   const session = await auth();
 
-  const readMessage = await Message
-    .find({
-      recipient: session?.user?.id,
-      read: true,
-    })
-    .sort({
-      createdAt: -1,
-    })
-    .populate('sender', 'username')
-    .populate('property', 'name')
-    .lean();
+  if (!session?.user?.id) {
+    return notFound();
+  }
 
-  const unreadMessage = await Message
-    .find({
-      recipient: session?.user?.id,
-      read: false,
-    })
-    .sort({
-      createdAt: -1,
-    })
-    .populate<{ sender: IUser }>('sender', 'username')
-    .populate<{ property: IProperty }>('property', 'name')
-    .lean();
+  const readMessage = await fetchMessages(session?.user?.id, true);
+  const unreadMessage = await await fetchMessages(session?.user?.id, false);;
 
-  const messages = [ ...unreadMessage, ...readMessage ] as unknown as (IMessage & { property: IProperty })[];
+  const messages = [ ...unreadMessage, ...readMessage ];
 
   return (
     <section className="bg-blue-50">
@@ -47,7 +26,7 @@ const MessagePage = async () => {
             ) : ( 
               messages.map(message => (
                 <MessageCard
-                  key={message._id}
+                  key={message.id}
                   message={message} 
                 />
               ))

@@ -1,30 +1,27 @@
 'use server';
 
 import { auth } from "@/auth";
-import connectDB from "@/db/database";
-import Message from "@/models/message";
+import { db } from "@/db";
 import { revalidatePath } from "next/cache";
 
 async function deleteMessage(messageId: string) {
-  await connectDB();
-
   const session = await auth();
 
   if (!session?.user || !session?.user?.id) {
     throw new Error('User ID is required');
   }
 
-  const message = await Message.findById(messageId);
+  const message = await db.message.findFirst({ where: { id: messageId } });
 
   if (!message) {
     throw new Error('Property No Found');
   }
 
-  if (message.recipient.toString() !== session.user.id.toString()) {
+  if (message.recipientId !== session.user.id) {
     throw new Error('Unauthorized');
   }
 
-  await message.deleteOne();
+  await db.message.delete({ where: { id: messageId } });
 
 
   revalidatePath('/', 'layout');
