@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { auth } from "@/auth";
 import { db } from "@/db";
 
-const propertySchema = z.object({
+const addMessageSchema = z.object({
   recipientId: z.string(),
   propertyId: z.string(),
   senderId: z.string(),
@@ -30,7 +30,7 @@ async function addMessage(prevState: { submitted: boolean, error: string | null 
     };
   }
 
-  const result = propertySchema.safeParse({
+  const result = addMessageSchema.safeParse({
     recipientId,
     propertyId: formData.get('propertyId'),
     senderId: session.user.id,

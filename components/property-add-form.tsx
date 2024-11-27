@@ -281,7 +281,7 @@ const PropertyAddForm = () => {
         </Button>
       </div>
     </form>
-  )
+  );
 };
 
 export default PropertyAddForm;

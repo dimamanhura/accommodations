@@ -1,12 +1,39 @@
 'use server';
 
+import { z } from 'zod';
 import { auth } from "@/auth";
 import { db } from "@/db";
-import { Property } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-async function updatePropertyAction(propertyId: string, formData: FormData) {
+const updatePropertySchema = z.object({
+  description: z.string().min(3).max(1000),
+  amenities: z.array(z.string()),
+  ownerId: z.string(),
+  type: z.string().min(3).max(255),
+  name: z.string().min(3).max(255),
+  squareFeet: z.number().positive().min(1),
+  beds: z.number().positive().min(1),
+  baths: z.number().positive().min(1),
+  location: z.object({
+    street: z.string().min(3).max(255),
+    state: z.string().min(3).max(255),
+    city: z.string().min(3).max(255),
+    zip: z.string().min(3).max(255),
+  }),
+  rates: z.object({
+    nightly: z.number().positive().min(1), 
+    weekly: z.number().positive().min(1),
+    monthly: z.number().positive().min(1),
+  }),
+  seller: z.object({
+    phone: z.string().min(3).max(255),
+    email: z.string().email().min(3).max(255),
+    name: z.string().min(3).max(255),
+  }),
+});
+
+async function updateProperty(propertyId: string, formData: FormData) {
   const session = await auth();
 
   if (!session?.user || !session?.user?.id) {
@@ -19,35 +46,39 @@ async function updatePropertyAction(propertyId: string, formData: FormData) {
     throw new Error('Unauthorized');
   }
 
-  const propertyData = {
+  const result = updatePropertySchema.safeParse({
     amenities: formData.getAll('amenities'),
-    owner: session.user.id,
+    ownerId: session.user.id,
     type: formData.get('type'),
     name: formData.get('name'),
     description: formData.get('description'),
     location: {
       street: formData.get('location.street'),
-      city: formData.get('location.city'),
       state: formData.get('location.state'),
+      city: formData.get('location.city'),
       zip: formData.get('location.zip'),
     },
-    beds: formData.get('beds'),
-    baths: formData.get('baths'),
-    squareFeet: formData.get('squareFeet'),
+    beds: parseInt(formData.get('beds') as string),
+    baths: parseInt(formData.get('baths') as string),
+    squareFeet: parseInt(formData.get('squareFeet') as string),
     rates: {
-      nightly: formData.get('rates.nightly'),
-      weekly: formData.get('rates.weekly'),
-      monthly: formData.get('rates.monthly'),
+      nightly: parseInt(formData.get('rates.nightly') as string), 
+      weekly: parseInt(formData.get('rates.weekly') as string),
+      monthly: parseInt(formData.get('rates.monthly') as string),
     },
     seller: {
-      name: formData.get('seller.name'),
-      email: formData.get('seller.email'),
       phone: formData.get('seller.phone'),
+      email: formData.get('seller.email'),
+      name: formData.get('seller.name'),
     },
-  };
+  });
+
+  if (!result.success) {
+    throw new Error('Invalid data');
+  }
 
   await db.property.update({
-    data: propertyData as unknown as Property,
+    data: result.data,
     where: {
       id: propertyId,
     },
@@ -57,4 +88,4 @@ async function updatePropertyAction(propertyId: string, formData: FormData) {
   redirect(`/properties/${propertyId}`);
 };
 
-export default updatePropertyAction;
+export default updateProperty;

@@ -7,7 +7,7 @@ import cloudinary from "@/cloudinary";
 import { auth } from "@/auth";
 import { db } from "@/db";
 
-const propertySchema = z.object({
+const addPropertySchema = z.object({
   description: z.string().min(3).max(1000),
   amenities: z.array(z.string()),
   ownerId: z.string(),
@@ -63,7 +63,7 @@ async function addProperty(formData: FormData) {
   const images = (formData.getAll('images') as File[]).filter((image) => image.name !== '');
   const imageUrls = await getImageUrls(images);
 
-  const result = propertySchema.safeParse({
+  const result = addPropertySchema.safeParse({
     amenities,
     ownerId: session.user.id,
     type: formData.get('type'),
@@ -91,7 +91,6 @@ async function addProperty(formData: FormData) {
     images: imageUrls,
   });
 
-  
   if (!result.success) {
     throw new Error('Invalid data');
   }
