@@ -11,7 +11,7 @@ const MessagePage = async () => {
   }
 
   const readMessage = await fetchMessages(session?.user?.id, true);
-  const unreadMessage = await await fetchMessages(session?.user?.id, false);;
+  const unreadMessage = await fetchMessages(session?.user?.id, false);;
 
   const messages = [ ...unreadMessage, ...readMessage ];
 

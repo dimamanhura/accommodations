@@ -10,20 +10,18 @@ const SavedPropertiesPage = async () => {
     return notFound();
   }
 
-  const user = await db.user.findFirst({
+  const bookmarks = await db.bookmark.findMany({
     where: {
-      id: session.user.id,
+      userId: session.user.id,
     },
     include: {
-      bookmarks: {},
+      property: {},
     }
   });
 
-  if (!user) {
+  if (!bookmarks) {
     return notFound();
   }
-
-  const { bookmarks } = user;
 
   return (
     <section className="px-4 py-6">
@@ -35,8 +33,11 @@ const SavedPropertiesPage = async () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {
-                bookmarks.map((property) => (
-                  <PropertyCard property={property} key={property.id} />
+                bookmarks.map((bookmark) => (
+                  <PropertyCard
+                    property={bookmark.property}
+                    key={bookmark.id}
+                  />
                 ))
               }
             </div>

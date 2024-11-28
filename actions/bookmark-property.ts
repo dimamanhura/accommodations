@@ -17,7 +17,6 @@ async function bookmarkPropertyAction(propertyId: string) {
     },
     include: {
       bookmarks: {
-
       },
     },
   });
@@ -27,33 +26,26 @@ async function bookmarkPropertyAction(propertyId: string) {
   }
 
   let isBookmarked = user.bookmarks
-    .map(bookmark => bookmark.id)
+    .map(bookmark => bookmark.propertyId)
     .includes(propertyId);
   let message: string;
 
   if (isBookmarked) {
-    await db.user.update({
-      data: {
-        bookmarks: user.bookmarks
-          .filter(bookmark => bookmark.id !== propertyId)
-          .map(bookmark => bookmark.id),
-      },
+    await db.bookmark.delete({
       where: {
-        id: session.user.id,
+        userId_propertyId: {
+          propertyId,
+          userId: session.user.id,
+        },
       },
     });
     message = 'Bookmark Removed';
     isBookmarked = false;
   } else {
-    await db.user.update({
+    await db.bookmark.create({
       data: {
-        bookmarks: [
-          user.bookmarks.map(bookmark => bookmark.id),
-          propertyId,
-        ],
-      },
-      where: {
-        id: session.user.id,
+        propertyId,
+        userId: session.user.id,
       },
     });
     message = 'Bookmark Added';

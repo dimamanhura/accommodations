@@ -1,8 +1,8 @@
 import { cache } from "react";
-import type { Message } from "@prisma/client";
+import type { Message, Property, User } from "@prisma/client";
 import { db } from "@/db";
 
-export const fetchMessages = cache((userId: string, read: boolean): Promise<Message[]> => {
+export const fetchMessages = cache((userId: string, read: boolean): Promise<(Message & { property: Property, sender: User })[]> => {
   return db.message
     .findMany({
       include: {

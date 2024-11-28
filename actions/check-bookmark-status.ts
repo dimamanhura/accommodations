@@ -27,7 +27,7 @@ async function checkBookmarkStatus(propertyId: string) {
   }
 
   const isBookmarked = user.bookmarks
-    .map(bookmark => bookmark.id)
+    .map(bookmark => bookmark.propertyId)
     .includes(propertyId);
 
   return { isBookmarked };

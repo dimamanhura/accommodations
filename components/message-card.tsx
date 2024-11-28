@@ -4,25 +4,24 @@ import { useState } from "react";
 import markMessageAsRead from "@/actions/mark-message-as-read";
 import deleteMessage from "@/actions/delete-message";
 import { useGlobalContext } from "@/context/global-context";
-import { Message } from "postcss";
-import { Property } from "@prisma/client";
+import { Message, Property, User } from "@prisma/client";
 
 interface MessageCardProps {
-  message: Message & { property: Property };
-}
+  message: Message & { property: Property, sender: User };
+};
 
 const MessageCard = ({ message }: MessageCardProps) => {
   const { setUnreadCount } = useGlobalContext();
   const [isRead, setIsRead] = useState(message.read);
 
   const handleReadClick = async () => {
-    const read = await markMessageAsRead(message._id);
+    const read = await markMessageAsRead(message.id);
     setIsRead(read);
     setUnreadCount((prevCount: number) => read ? prevCount - 1 : prevCount + 1);
   };
 
   const handleDeleteClick = async () => {
-    await deleteMessage(message._id);
+    await deleteMessage(message.id);
     setUnreadCount((prevCount: number) => prevCount - 1);
   };
 
