@@ -5,6 +5,7 @@ import markMessageAsRead from "@/actions/mark-message-as-read";
 import deleteMessage from "@/actions/delete-message";
 import { useGlobalContext } from "@/context/global-context";
 import { Message, Property, User } from "@prisma/client";
+import { Button, Chip } from "@nextui-org/react";
 
 interface MessageCardProps {
   message: Message & { property: Property, sender: User };
@@ -28,7 +29,7 @@ const MessageCard = ({ message }: MessageCardProps) => {
   return (
     <div className="relative bg-white p-4 rounded-md shadow-md border border-grey-200">
       {!isRead && (
-        <div className="absolute top-2 right-2 bg-yellow-500 text-white px-2 py-1 rounded-md">New</div>
+        <Chip className="absolute top-2 right-2" color="warning">New</Chip>
       )}
       <h2 className="text-xl mb-4">
         <span className="font-bold">Property Inquiry:</span>{' '}
@@ -48,15 +49,14 @@ const MessageCard = ({ message }: MessageCardProps) => {
           <strong>Received:</strong>{' '}
           { new Date(message.createdAt).toLocaleString() }
         </li>
-        <button
-          className="mt-4 mr-3 bg-blue-500 text-white py-1 px-3 rounded-md"
-          onClick={handleReadClick}
-        >
-          {isRead ? 'Mark As New' : 'Mark As Read'}
-        </button>
-        <button className="mt-4 bg-red-500 text-white py-1 px-3 rounded-md" onClick={handleDeleteClick}>
-          Delete
-        </button>
+        <div className="flex gap-2 mt-4">
+          <Button color="primary" onClick={handleReadClick}>
+            {isRead ? 'Mark As New' : 'Mark As Read'}
+          </Button>
+          <Button color="danger" onClick={handleDeleteClick}>
+            Delete
+          </Button>
+        </div>
       </ul>
     </div>
   );

@@ -10,6 +10,7 @@ interface SearchResultsPageProps {
 
 const SearchResultsPage = async ({ searchParams }: SearchResultsPageProps) => {
   const { location, propertyType } = await searchParams;
+
   const properties = await db.property.findMany({
     where: {
       type: {
@@ -24,11 +25,12 @@ const SearchResultsPage = async ({ searchParams }: SearchResultsPageProps) => {
             contains: location,
             mode: 'insensitive',
           },
+        },
+        {
           description: {
             contains: location,
-             mode: 'insensitive',
+            mode: 'insensitive',
           },
-
         },
         // { 'location.street': locationPattern },
         // { 'location.city': locationPattern },
@@ -38,11 +40,15 @@ const SearchResultsPage = async ({ searchParams }: SearchResultsPageProps) => {
     }
   });
 
+
   return (
     <>
       <section className="bg-blue-700 py-2">
         <div className="max-2-7xl mx-auto px-4 flex flex-col items-start lg:px-8">
-          <PropertySearchForm />
+          <PropertySearchForm
+            propertyType={propertyType}
+            location={location}
+          />
         </div>
       </section>
       <section className="px-4 py-6">

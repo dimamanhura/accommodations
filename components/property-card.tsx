@@ -1,3 +1,4 @@
+import { Button } from "@nextui-org/react";
 import { Property } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
@@ -97,12 +98,9 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             <FaMapMarked className="text-orange-600 mt-1" />
             <span className="text-orange-700"> {property.location.city} {property.location.state} </span>
           </div>
-          <Link
-            href={`/properties/${property.id}`}
-            className="h-[36px] bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-center text-sm"
-          >
+          <Button color="primary" href={`/properties/${property.id}`} as={Link}>
             Details
-          </Link>
+          </Button>
         </div>
       </div>
     </div>

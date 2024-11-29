@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import deletePropertyAction from "@/actions/delete-property";
 import { Property } from "@prisma/client";
+import { Button } from "@nextui-org/react";
 
 interface ProfilePropertiesProps {
   initialProperties: Property[];
@@ -41,20 +42,13 @@ const ProfileProperties = ({ initialProperties }: ProfilePropertiesProps) => {
         <p className="text-lg font-semibold">{property.name}</p>
         <p className="text-gray-600">Address: {property.location.city}, {property.location.state}, {property.location.street}</p>
       </div>
-      <div className="mt-2">
-        <Link
-          href={`/properties/${property.id}/edit`}
-          className="bg-blue-500 text-white px-3 py-3 rounded-md mr-2 hover:bg-blue-600"
-        >
+      <div className="flex gap-2 mt-2">
+        <Button color="primary" href={`/properties/${property.id}/edit`} as={Link}>
           Edit
-        </Link>
-        <button
-          className="bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600"
-          type="button"
-          onClick={() => handleDeleteProperty(property.id)}
-        >
+        </Button>
+        <Button color="danger" onClick={() => handleDeleteProperty(property.id)}>
           Delete
-        </button>
+        </Button>
       </div>
     </div>
   ))

@@ -1,5 +1,6 @@
 import PropertyCard from '@/components/property-card';
 import { db } from '@/db';
+import { Button } from '@nextui-org/react';
 import Link from 'next/link';
 
 const HomeProperties = async () => {
@@ -33,8 +34,10 @@ const HomeProperties = async () => {
           )}
         </div>
       </section>
-      <section className='m-auto max-w-lg my-6 px-6'>
-        <Link href="/properties" className='block bg-black text-white text-center py-4 px-6 rounded-xl hover:bg-slate-500'>View All Properties</Link>
+      <section className='w-full my-6 flex items-center justify-center'>
+        <Button size="lg" href="/properties" as={Link}>
+          View All Properties
+        </Button>
       </section>
     </>
   );
