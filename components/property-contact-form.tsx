@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState } from "react";
+import { useFormState } from "react-dom";
 import { useSession } from "next-auth/react";
 import { Chip, Input, Textarea } from "@nextui-org/react";
 import { Property } from "@prisma/client";
@@ -14,7 +14,7 @@ interface PropertyContactFormProps {
 
 const PropertyContactForm = ({ property }: PropertyContactFormProps) => {
   const session = useSession();
-  const [state, action] = useActionState(addMessage, {
+  const [state, action] = useFormState(addMessage, {
     success: false,
     errors: {},
   });

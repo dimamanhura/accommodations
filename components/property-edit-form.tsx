@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState } from "react";
+import { useFormState } from "react-dom";
 import editProperty from "@/actions/edit-property";
 import {
   CheckboxGroup,
@@ -113,7 +113,7 @@ const amenities = [
 ];
 
 const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
-  const [state, action] = useActionState(editProperty.bind(null, property.id), {
+  const [state, action] = useFormState(editProperty.bind(null, property.id), {
     success: false,
     errors: {},
   });

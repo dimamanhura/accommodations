@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState } from "react";
+import { useFormState } from "react-dom";
 import { Select, SelectItem, Input, Textarea, CheckboxGroup, Checkbox, Chip } from "@nextui-org/react";
 import addProperty from "@/actions/add-property";
 import SubmitButton from "@/components/submit-button";
@@ -100,7 +100,7 @@ const amenities = [
 ];
 
 const PropertyAddForm = () => {
-  const [state, action] = useActionState(addProperty, {
+  const [state, action] = useFormState(addProperty, {
     success: false,
     errors: {},
   });
