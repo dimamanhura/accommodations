@@ -2,97 +2,150 @@
 
 import { useActionState } from "react";
 import { useSession } from "next-auth/react";
-import addMessage from "@/actions/add-message";
-import SubmitMessageButton from "./submit-message-button";
+import { Chip, Input, Textarea } from "@nextui-org/react";
 import { Property } from "@prisma/client";
+import addMessage from "@/actions/add-message";
+import { FaPaperPlane } from "react-icons/fa";
+import SubmitButton from "./submit-button";
 
 interface PropertyContactFormProps {
   property: Property;
-}
+};
 
 const PropertyContactForm = ({ property }: PropertyContactFormProps) => {
   const session = useSession();
-  const [state, formAction] = useActionState(addMessage, { submitted: false, error: null });
+  const [state, action] = useActionState(addMessage, {
+    success: false,
+    errors: {},
+  });
 
   return session?.data?.user?.id && (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      {state.submitted && (
-        <p className="text-green-500 mb-4">Your message has been sent</p>
-      )}
-      {state.error && (
-        <p className="text-red-500 mb-4">{state.error}</p>
-      )}
-      <h3 className="text-xl font-bold mb-6">Contact Property Manager</h3>
-      <form action={formAction}>
-        <input type="hidden" name="propertyId" id="propertyId" defaultValue={property.id} />
-        <input type="hidden" name="recipientId" id="recipientId" defaultValue={property.ownerId} />
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="name"
-          >
-            Name:
-          </label>
+    <form action={action}>
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <h3 className="text-xl font-bold mb-6">Contact Property Manager</h3>
+        <div className="w-full flex flex-col gap-4">
+          {state.success && (
+            <Chip
+              className="px-4 py-6 text-sm w-full max-w-full"
+              variant="flat"
+              radius="sm"
+              color="success"
+              size="lg"
+            >
+              Your message has been sent
+            </Chip>
+          )}
+
+          {!!state.errors._errors?.length && (
+            <Chip
+              className="px-4 py-6 text-sm w-full max-w-full"
+              variant="flat"
+              radius="sm"
+              color="danger"
+              size="lg"
+            >
+              {state.errors._errors.join(', ')}
+            </Chip>
+          )}
+
+          {!!state.errors.recipientId?._errors && (
+            <Chip
+              className="px-4 py-6 text-sm w-full max-w-full"
+              variant="flat"
+              radius="sm"
+              color="danger"
+              size="lg"
+            >
+              {state.errors.recipientId?._errors.join(', ')}
+            </Chip>
+          )}
+
+          {!!state.errors.propertyId?._errors && (
+            <Chip
+              className="px-4 py-6 text-sm w-full max-w-full"
+              variant="flat"
+              radius="sm"
+              color="danger"
+              size="lg"
+            >
+              {state.errors.propertyId?._errors.join(', ')}
+            </Chip>
+          )}
+
+          {!!state.errors.senderId?._errors && (
+            <Chip
+              className="px-4 py-6 text-sm w-full max-w-full"
+              variant="flat"
+              radius="sm"
+              color="danger"
+              size="lg"
+            >
+              {state.errors.senderId?._errors.join(', ')}
+            </Chip>
+          )}
+
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="name"
+            defaultValue={property.id}
+            type="hidden"
+            name="propertyId"
+            id="propertyId"
+          />
+          
+          <input
+            defaultValue={property.ownerId}
+            type="hidden"
+            name="recipientId"
+            id="recipientId"
+          />
+          
+          <Input
+            errorMessage={state.errors.name?._errors?.join(', ')}
+            isRequired
+            isInvalid={!!state.errors.name?._errors}
+            label="Name"
+            size="lg"
             name="name"
-            type="text"
-            placeholder="Enter your name"
-            required
+            id="name"
           />
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="email"
-          >
-            Email:
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="email"
-            name="email"
+          
+          <Input
+            errorMessage={state.errors.email?._errors?.join(', ')}
+            isRequired
+            isInvalid={!!state.errors.email?._errors}
+            label="Email"
+            size="lg"
             type="email"
-            placeholder="Enter your email"
-            required
+            name="email"
+            id="email"
           />
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="phone"
-          >
-            Phone:
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="phone"
+
+          <Input
+            errorMessage={state.errors.phone?._errors?.join(', ')}
+            isRequired
+            isInvalid={!!state.errors.phone?._errors}
+            label="Phone"
+            size="lg"
             name="phone"
-            type="text"
-            placeholder="Enter your phone number"
+            id="phone"
           />
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="message"
-          >
-            Message:
-          </label>
-          <textarea
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 h-44 focus:outline-none focus:shadow-outline"
-            id="body"
+
+          <Textarea
+            errorMessage={state.errors.body?._errors?.join(', ')}
+            isRequired
+            isInvalid={!!state.errors.body?._errors}
+            label="Message"
             name="body"
-            placeholder="Enter your message"
-          ></textarea>
+            size="lg"
+            id="body"
+          />
+      
+          <SubmitButton startContent={<FaPaperPlane />}>
+            Send Message
+          </SubmitButton>
         </div>
-        <div>
-          <SubmitMessageButton />
-        </div>
-      </form>
-    </div>
-  )
+      </div>
+    </form>
+  );
 };
 
 export default PropertyContactForm;

@@ -6,7 +6,7 @@ import { db } from "@/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-const updatePropertySchema = z.object({
+const editPropertySchema = z.object({
   description: z.string().min(3).max(1000),
   amenities: z.array(z.string()),
   ownerId: z.string(),
@@ -33,20 +33,89 @@ const updatePropertySchema = z.object({
   }),
 });
 
-async function updateProperty(propertyId: string, formData: FormData) {
+interface EditPropertyFormState {
+  success?: boolean;
+  errors: {
+     _errors?: string[]
+    description?: {
+      _errors?: string[],
+    };
+    amenities?: {
+      _errors?: string[],
+    };
+    ownerId?: {
+      _errors?: string[],
+    }; 
+    type?:{
+      _errors?: string[],
+    };
+    name?: {
+      _errors?: string[],
+    };
+    squareFeet?: {
+      _errors?: string[],
+    };
+    beds?: {
+      _errors?: string[],
+    };
+    baths?: {
+      _errors?: string[],
+    };
+    location?: {
+      _errors?: string[];
+      street?: {
+        _errors?: string[],
+      };
+      state?:{
+        _errors?: string[],
+      };
+      city?: {
+        _errors?: string[],
+      };
+      zip?: {
+      _errors?: string[],
+    };
+    };
+    rates?: {
+      _errors?: string[];
+      nightly?: {
+        _errors?: string[],
+      };
+      weekly?: {
+        _errors?: string[],
+      };
+      monthly?: {
+        _errors?: string[],
+      };
+    };
+    seller?: {
+      _errors?: string[];
+      phone?: {
+        _errors?: string[],
+      };
+      email?: {
+        _errors?: string[],
+      };
+      name?: {
+        _errors?: string[],
+      };
+    };
+  };
+};
+
+async function editProperty(propertyId: string, prevState: EditPropertyFormState, formData: FormData): Promise<EditPropertyFormState> {
   const session = await auth();
 
   if (!session?.user || !session?.user?.id) {
-    throw new Error('User ID is required');
+    return {
+      success: false,
+      errors: {
+        _errors: ['User ID is required'],
+      },
+    };
   }
 
-  const existingProperty = await db.property.findFirst({ where: { id: propertyId } });
-
-  if (existingProperty?.ownerId !== session.user.id) {
-    throw new Error('Unauthorized');
-  }
-
-  const result = updatePropertySchema.safeParse({
+  const result = editPropertySchema.safeParse({
     amenities: formData.getAll('amenities'),
     ownerId: session.user.id,
     type: formData.get('type'),
@@ -74,7 +143,25 @@ async function updateProperty(propertyId: string, formData: FormData) {
   });
 
   if (!result.success) {
-    throw new Error('Invalid data');
+    return {
+      success: false,
+      errors: result.error.format(),
+    };
+  }
+
+  const existingProperty = await db.property.findFirst({
+    where: {
+      id: propertyId,
+    },
+  });
+
+  if (existingProperty?.ownerId !== session.user.id) {
+    return {
+      success: false,
+      errors: {
+        _errors: ['Unauthorized'],
+      },
+    };
   }
 
   await db.property.update({
@@ -86,6 +173,11 @@ async function updateProperty(propertyId: string, formData: FormData) {
 
   revalidatePath('/', 'layout');
   redirect(`/properties/${propertyId}`);
+
+  return {
+    success: true,
+    errors: {},
+  };
 };
 
-export default updateProperty;
+export default editProperty;

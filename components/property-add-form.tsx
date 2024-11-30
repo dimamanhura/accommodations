@@ -1,7 +1,9 @@
 'use client';
 
-import { Select, SelectItem, Input, Textarea, CheckboxGroup, Checkbox, Button } from "@nextui-org/react";
+import { useActionState } from "react";
+import { Select, SelectItem, Input, Textarea, CheckboxGroup, Checkbox, Chip } from "@nextui-org/react";
 import addProperty from "@/actions/add-property";
+import SubmitButton from "@/components/submit-button";
 
 const apartmentTypes = [
   {
@@ -98,14 +100,21 @@ const amenities = [
 ];
 
 const PropertyAddForm = () => {
+  const [state, action] = useActionState(addProperty, {
+    success: false,
+    errors: {},
+  });
+
   return (
-    <form action={addProperty}>
+    <form action={action}>
       <h2 className="text-3xl text-center font-semibold mb-6">
         Add Property
       </h2>
 
       <Select
+        errorMessage={state.errors.type?._errors?.join(', ')}
         placeholder="Select property type"
+        isInvalid={!!state.errors.type?._errors}
         isRequired
         className="mb-4"
         label="Property Type"
@@ -119,6 +128,8 @@ const PropertyAddForm = () => {
       </Select>
 
       <Input
+        errorMessage={state.errors.name?._errors?.join(', ')}
+        isInvalid={!!state.errors.name?._errors}
         placeholder="eg. Beautiful Apartment In Miami"
         isRequired
         className="mb-4"
@@ -127,6 +138,8 @@ const PropertyAddForm = () => {
       />
 
       <Textarea
+        errorMessage={state.errors.description?._errors?.join(', ')}
+        isInvalid={!!state.errors.description?._errors}
         placeholder="Add an optional description of your property"
         isRequired
         className="mb-4"
@@ -138,6 +151,8 @@ const PropertyAddForm = () => {
         <label className="block text-gray-700 font-bold mb-2">Location</label>
 
         <Input
+          errorMessage={state.errors.location?.street?._errors?.join(', ')}
+          isInvalid={!!state.errors.location?.street?._errors}
           placeholder="Street"
           isRequired
           className="mb-4"
@@ -147,6 +162,8 @@ const PropertyAddForm = () => {
         />
         
         <Input
+          errorMessage={state.errors.location?.city?._errors?.join(', ')}
+          isInvalid={!!state.errors.location?.city?._errors}
           placeholder="City"
           isRequired
           className="mb-4"
@@ -156,6 +173,8 @@ const PropertyAddForm = () => {
         />
 
         <Input
+          errorMessage={state.errors.location?.state?._errors?.join(', ')}
+          isInvalid={!!state.errors.location?.state?._errors}
           placeholder="State"
           isRequired
           className="mb-4"
@@ -165,6 +184,8 @@ const PropertyAddForm = () => {
         />
 
         <Input
+          errorMessage={state.errors.location?.zip?._errors?.join(', ')}
+          isInvalid={!!state.errors.location?.zip?._errors}
           placeholder="ZIP Code"
           isRequired
           className="mb-4"
@@ -176,6 +197,8 @@ const PropertyAddForm = () => {
 
       <div className="flex w-full gap-4 mb-4">
         <Input
+          errorMessage={state.errors.beds?._errors?.join(', ')}
+          isInvalid={!!state.errors.beds?._errors}
           isRequired
           label="Beds"
           type="number"
@@ -183,6 +206,8 @@ const PropertyAddForm = () => {
           step="1"
         />
         <Input
+          errorMessage={state.errors.baths?._errors?.join(', ')}
+          isInvalid={!!state.errors.baths?._errors}
           isRequired
           label="Baths"
           type="number"
@@ -190,6 +215,8 @@ const PropertyAddForm = () => {
           step="1"
         />
         <Input
+          errorMessage={state.errors.squareFeet?._errors?.join(', ')}
+          isInvalid={!!state.errors.squareFeet?._errors}
           isRequired
           label="Square Feet"
           type="number"
@@ -199,7 +226,9 @@ const PropertyAddForm = () => {
       </div>
 
       <CheckboxGroup
+        errorMessage={state.errors.amenities?._errors?.join(', ')}
         orientation="horizontal"
+        isInvalid={!!state.errors.amenities?._errors}
         className="mb-4"
         label="Amenities"
         name="amenities"
@@ -217,16 +246,22 @@ const PropertyAddForm = () => {
         </label>
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
           <Input
+            errorMessage={state.errors.rates?.weekly?._errors?.join(', ')}
+            isInvalid={!!state.errors.rates?.weekly?._errors}
             label="Weekly"
             type="number"
             name="rates.weekly"
           />
           <Input
+            errorMessage={state.errors.rates?.monthly?._errors?.join(', ')}
+            isInvalid={!!state.errors.rates?.monthly?._errors}
             label="Monthly"
             type="number"
             name="rates.monthly"
           />
           <Input
+            errorMessage={state.errors.rates?.nightly?._errors?.join(', ')}
+            isInvalid={!!state.errors.rates?.nightly?._errors}
             label="Nightly"
             type="number"
             name="rates.nightly"
@@ -235,6 +270,8 @@ const PropertyAddForm = () => {
       </div>
 
       <Input
+        errorMessage={state.errors.seller?.name?._errors?.join(', ')}
+        isInvalid={!!state.errors.seller?.name?._errors}
         placeholder="Name"
         isRequired
         className="mb-4"
@@ -244,6 +281,8 @@ const PropertyAddForm = () => {
       />
 
       <Input
+        errorMessage={state.errors.seller?.email?._errors?.join(', ')}
+        isInvalid={!!state.errors.seller?.email?._errors}
         placeholder="Email address"
         isRequired
         className="mb-4"
@@ -253,6 +292,8 @@ const PropertyAddForm = () => {
       />
 
       <Input
+        errorMessage={state.errors.seller?.phone?._errors?.join(', ')}
+        isInvalid={!!state.errors.seller?.phone?._errors}
         placeholder="Phone"
         isRequired
         className="mb-4"
@@ -267,6 +308,8 @@ const PropertyAddForm = () => {
         </label>
 
         <Input
+          errorMessage={state.errors.images?._errors?.join(', ')}
+          isInvalid={!!state.errors.images?._errors}
           isRequired
           multiple
           accept="image/*"
@@ -275,10 +318,34 @@ const PropertyAddForm = () => {
         />
       </div>
 
+      {!!state.errors._errors?.length && (
+        <Chip
+          className="px-4 py-6 text-sm w-full max-w-full"
+          variant="flat"
+          radius="sm"
+          color="danger"
+          size="lg"
+        >
+          {state.errors._errors.join(', ')}
+        </Chip>
+      )}
+
+      {!!state.errors.ownerId?._errors && (
+        <Chip
+          className="px-4 py-6 text-sm w-full max-w-full"
+          variant="flat"
+          radius="sm"
+          color="danger"
+          size="lg"
+        >
+          {state.errors.ownerId._errors.join(', ')}
+        </Chip>
+      )}
+
       <div className="w-full">
-        <Button type="submit" color="primary" className="w-full">
+        <SubmitButton>
           Add Property
-        </Button>
+        </SubmitButton>
       </div>
     </form>
   );

@@ -52,11 +52,89 @@ const getImageUrls = async (images: File[]) => {
   return imageUrls;
 };
 
-async function addProperty(formData: FormData) {
+interface AddPropertyFormState {
+  success?: boolean;
+  errors: {
+     _errors?: string[];
+    description?: {
+      _errors?: string[];
+    };
+    amenities?: {
+      _errors?: string[];
+    };
+    ownerId?: {
+      _errors?: string[];
+    }; 
+    type?:{
+      _errors?: string[];
+    };
+    name?: {
+      _errors?: string[];
+    };
+    squareFeet?: {
+      _errors?: string[];
+    };
+    beds?: {
+      _errors?: string[];
+    };
+    baths?: {
+      _errors?: string[];
+    };
+    location?: {
+      _errors?: string[];
+      street?: {
+        _errors?: string[];
+      };
+      state?:{
+        _errors?: string[];
+      };
+      city?: {
+        _errors?: string[];
+      };
+      zip?: {
+      _errors?: string[];
+    };
+    };
+    rates?: {
+      _errors?: string[];
+      nightly?: {
+        _errors?: string[];
+      };
+      weekly?: {
+        _errors?: string[];
+      };
+      monthly?: {
+        _errors?: string[];
+      };
+    };
+    seller?: {
+      _errors?: string[];
+      phone?: {
+        _errors?: string[];
+      };
+      email?: {
+        _errors?: string[];
+      };
+      name?: {
+        _errors?: string[];
+      };
+    };
+    images?: {
+      _errors?: string[];
+    }
+  };
+};
+
+async function addProperty(prevState: AddPropertyFormState, formData: FormData): Promise<AddPropertyFormState> {
   const session = await auth();
 
   if (!session?.user || !session?.user?.id) {
-    throw new Error('User ID is required');
+    return {
+      success: false,
+      errors: {
+        _errors: ['User ID is required'],
+      },
+    };
   }
 
   const amenities = formData.getAll('amenities');
@@ -92,7 +170,10 @@ async function addProperty(formData: FormData) {
   });
 
   if (!result.success) {
-    throw new Error('Invalid data');
+    return {
+      success: false,
+      errors: result.error.format(),
+    };
   }
 
   const newProperty = await db.property.create({
@@ -101,6 +182,11 @@ async function addProperty(formData: FormData) {
 
   revalidatePath('/', 'layout');
   redirect(`/properties/${newProperty.id}`);
+
+  return {
+    success: true,
+    errors: {},
+  };
 };
 
 export default addProperty;

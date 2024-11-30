@@ -1,16 +1,18 @@
 'use client';
 
-import updateProperty from "@/actions/update-property";
+import { useActionState } from "react";
+import editProperty from "@/actions/edit-property";
 import {
   CheckboxGroup,
   SelectItem,
   Checkbox,
   Textarea,
-  Button,
   Select,
   Input,
+  Chip,
 } from "@nextui-org/react";
 import { Property } from "@prisma/client";
+import SubmitButton from "@/components/submit-button";
 
 interface PropertyEditFormProps {
   property: Property;
@@ -111,16 +113,21 @@ const amenities = [
 ];
 
 const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
-  const updatePropertyById = updateProperty.bind(null, property.id);
+  const [state, action] = useActionState(editProperty.bind(null, property.id), {
+    success: false,
+    errors: {},
+  });
   return (
-    <form action={updatePropertyById}>
+    <form action={action}>
       <h2 className="text-3xl text-center font-semibold mb-6">
-        Update Property
+        Edit Property
       </h2>
 
       <Select
-        placeholder="Select property type"
         defaultSelectedKeys={[property.type]}
+        placeholder="Select property type"
+        errorMessage={state.errors?.type?._errors?.join(', ')}
+        isInvalid={!!state.errors?.type?._errors}
         isRequired
         className="mb-4"
         label="Property Type"
@@ -134,6 +141,8 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
       </Select>
 
       <Input
+        errorMessage={state.errors?.name?._errors?.join(', ')}
+        isInvalid={!!state.errors?.name?._errors}
         defaultValue={property.name}
         placeholder="eg. Beautiful Apartment In Miami"
         isRequired
@@ -143,6 +152,8 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
       />
 
       <Textarea
+        errorMessage={state.errors?.description?._errors?.join(', ')}
+        isInvalid={!!state.errors?.description?._errors}
         defaultValue={property.description}
         placeholder="Add an optional description of your property"
         isRequired
@@ -155,6 +166,8 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
         <label className="block text-gray-700 font-bold mb-2">Location</label>
 
         <Input
+          errorMessage={state.errors?.location?.street?._errors?.join(', ')}
+          isInvalid={!!state.errors?.location?.street?._errors}
           defaultValue={property.location.street}
           placeholder="Street"
           isRequired
@@ -165,6 +178,8 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
         />
         
         <Input
+          errorMessage={state.errors?.location?.city?._errors?.join(', ')}
+          isInvalid={!!state.errors?.location?.city?._errors}
           defaultValue={property.location.city}
           placeholder="City"
           isRequired
@@ -175,6 +190,8 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
         />
 
         <Input
+          errorMessage={state.errors?.location?.state?._errors?.join(', ')}
+          isInvalid={!!state.errors?.location?.state?._errors}
           defaultValue={property.location.state}
           placeholder="State"
           isRequired
@@ -185,6 +202,8 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
         />
 
         <Input
+          errorMessage={state.errors?.location?.zip?._errors?.join(', ')}
+          isInvalid={!!state.errors?.location?.zip?._errors}
           defaultValue={property.location.zip}
           placeholder="ZIP Code"
           isRequired
@@ -197,6 +216,8 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
 
       <div className="flex w-full gap-4 mb-4">
         <Input
+          errorMessage={state.errors?.beds?._errors?.join(', ')}
+          isInvalid={!!state.errors?.beds?._errors}
           defaultValue={`${property.beds}`}
           isRequired
           label="Beds"
@@ -205,6 +226,8 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
           step="1"
         />
         <Input
+          errorMessage={state.errors?.baths?._errors?.join(', ')}
+          isInvalid={!!state.errors?.baths?._errors}
           defaultValue={`${property.baths}`}
           isRequired
           label="Baths"
@@ -213,6 +236,8 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
           step="1"
         />
         <Input
+          errorMessage={state.errors?.squareFeet?._errors?.join(', ')}
+          isInvalid={!!state.errors?.squareFeet?._errors}
           defaultValue={`${property.squareFeet}`}
           isRequired
           label="Square Feet"
@@ -224,6 +249,8 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
 
       <CheckboxGroup
         defaultValue={property.amenities}
+        errorMessage={state.errors?.amenities?._errors?.join(', ')}
+        isInvalid={!!state.errors?.amenities?._errors}
         orientation="horizontal"
         className="mb-4"
         label="Amenities"
@@ -242,18 +269,24 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
         </label>
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
           <Input
+            errorMessage={state.errors?.rates?.weekly?._errors?.join(', ')}
+            isInvalid={!!state.errors?.rates?.weekly?._errors}
             defaultValue={`${property.rates.weekly}`}
             label="Weekly"
             type="number"
             name="rates.weekly"
           />
           <Input
+            errorMessage={state.errors?.rates?.monthly?._errors?.join(', ')}
+            isInvalid={!!state.errors?.rates?.monthly?._errors}
             defaultValue={`${property.rates.monthly}`}
             label="Monthly"
             type="number"
             name="rates.monthly"
           />
           <Input
+            errorMessage={state.errors?.rates?.nightly?._errors?.join(', ')}
+            isInvalid={!!state.errors?.rates?.nightly?._errors}
             defaultValue={`${property.rates.nightly}`}
             label="Nightly"
             type="number"
@@ -263,6 +296,8 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
       </div>
 
       <Input
+        errorMessage={state.errors?.seller?.name?._errors?.join(', ')}
+        isInvalid={!!state.errors?.seller?.name?._errors}
         defaultValue={property.seller.name}
         placeholder="Name"
         isRequired
@@ -273,6 +308,8 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
       />
 
       <Input
+        errorMessage={state.errors?.seller?.email?._errors?.join(', ')}
+        isInvalid={!!state.errors?.seller?.email?._errors}
         defaultValue={property.seller.email}
         placeholder="Email address"
         isRequired
@@ -283,6 +320,8 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
       />
 
       <Input
+        errorMessage={state.errors?.seller?.phone?._errors?.join(', ')}
+        isInvalid={!!state.errors?.seller?.phone?._errors}
         defaultValue={property.seller.phone}
         placeholder="Phone"
         isRequired
@@ -292,10 +331,22 @@ const PropertyEditForm = ({ property }: PropertyEditFormProps) => {
         name="seller.phone"
       />
 
+      {!!state.errors._errors?.length && (
+        <Chip
+          className="px-4 py-6 text-sm w-full max-w-full"
+          variant="flat"
+          radius="sm"
+          color="danger"
+          size="lg"
+        >
+          {state.errors._errors.join(', ')}
+        </Chip>
+      )}
+
       <div className="w-full">
-        <Button type="submit" color="primary" className="w-full">
-          Update Property
-        </Button>
+        <SubmitButton>
+          Edit Property
+        </SubmitButton>
       </div>
     </form>
   );

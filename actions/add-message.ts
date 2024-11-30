@@ -14,19 +14,54 @@ const addMessageSchema = z.object({
   body: z.string().min(3).max(1000),
 });
 
-async function addMessage(prevState: { submitted: boolean, error: string | null }, formData: FormData) {
+interface AddMessageFormState {
+  success?: boolean;
+  errors: {
+    recipientId?: {
+      _errors?: string[];
+    };
+    propertyId?: {
+      _errors?: string[];
+    };
+    senderId?: {
+      _errors?: string[];
+    };
+    email?: {
+      _errors?: string[];
+    };
+    phone?: {
+      _errors?: string[];
+    };
+    name?: {
+      _errors?: string[];
+    };
+    body?: {
+      _errors?: string[];
+    };
+    _errors?: string[];
+  };
+};
+
+async function addMessage(prevState: AddMessageFormState, formData: FormData): Promise<AddMessageFormState> {
   const session = await auth();
 
   if (!session?.user || !session?.user?.id) {
-    throw new Error('User ID is required');
+    return {
+      success: false,
+      errors: {
+        _errors: ['User ID is required']
+      },
+    };
   }
 
   const recipientId = formData.get('recipientId');
 
   if (session.user.id === recipientId) {
     return {
-      submitted: false,
-      error: 'You can not send a message to yourself',
+      success: false,
+      errors: {
+        _errors: ['You can not send a message to yourself']
+      },
     };
   }
 
@@ -41,7 +76,10 @@ async function addMessage(prevState: { submitted: boolean, error: string | null 
   });
 
   if (!result.success) {
-    throw new Error('Invalid data');
+    return {
+      success: false,
+      errors: result.error.format(),
+    };
   }
 
   await db.message.create({
@@ -49,8 +87,8 @@ async function addMessage(prevState: { submitted: boolean, error: string | null 
   });
 
   return {
-    submitted: true,
-    error: null,
+    success: true,
+    errors: {},
   };
 };
 
