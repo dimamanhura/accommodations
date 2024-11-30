@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Input, Select, SelectItem } from "@nextui-org/react";
+import { FaSearch } from "react-icons/fa";
 
 const apartmentTypes = [
   {
@@ -68,16 +69,15 @@ export const PropertySearchForm = (props: PropertySearchFormProps) => {
       <Input
         placeholder="Enter Location (City, State, Zip, etc)"
         label="Location"
-        color="primary"
         value={location}
         type="text"
         onChange={(e) => setLocation(e.target.value)}
       />
+
       <Select
         defaultSelectedKeys={propertyType ? [propertyType] : []}
         placeholder="Select Property Type"
         label="Property Type"
-        color="primary"
         onChange={(e) => setPropertyType(e.target.value)}
       >
         {apartmentTypes.map((apartmentType) => (
@@ -86,7 +86,8 @@ export const PropertySearchForm = (props: PropertySearchFormProps) => {
           </SelectItem>
         ))}
       </Select>
-      <Button size="lg" color="primary" type="submit">
+
+      <Button size="lg" type="submit">
         Search
       </Button>
     </form>

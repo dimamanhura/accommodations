@@ -22,7 +22,6 @@ const SubmitButton = ({
       isDisabled={status.pending}
       endContent={endContent}
       fullWidth
-      radius="full"
       color="primary"
       type="submit"
     >

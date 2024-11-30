@@ -8,7 +8,6 @@ const ShareButtons = () => {
       <Button
         startContent={<FaShare />}
         fullWidth
-        radius="full"
         color="warning"
       >
         Share Property

@@ -48,7 +48,6 @@ const BookmarkButton = ({ property }: BookmarkButtonProps) => {
     <Button
       startContent={<FaBookmark />}
       fullWidth
-      radius="full"
       color="danger"
       onClick={handleClick}
     >
@@ -58,7 +57,6 @@ const BookmarkButton = ({ property }: BookmarkButtonProps) => {
     <Button
       startContent={<FaBookmark />}
       fullWidth
-      radius="full"
       color="primary"
       onClick={handleClick}
     >
