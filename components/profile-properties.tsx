@@ -5,7 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import deletePropertyAction from "@/actions/delete-property";
 import { Property } from "@prisma/client";
-import { Button } from "@nextui-org/react";
+import { Button, Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
+import PropertyLocation from "./property-location";
 
 interface ProfilePropertiesProps {
   initialProperties: Property[];
@@ -25,32 +26,34 @@ const ProfileProperties = ({ initialProperties }: ProfilePropertiesProps) => {
 
     const updatedProperties = properties.filter(property => property.id !== propertyId);
     setProperties(updatedProperties);
-  }
+  };
 
   return properties.map(property => (
-    <div className="mb-10" key={property.id}>
-      <Link href={`/properties/${property.id}`}>
-        <Image
-          className="h-32 w-full rounded-md object-cover"
-          src={property.images[0]}
-          alt="Property 1"
-          width={1000}
-          height={200}
-        />
-      </Link>
-      <div className="mt-2">
-        <p className="text-lg font-semibold">{property.name}</p>
-        <p className="text-gray-600">Address: {property.location.city}, {property.location.state}, {property.location.street}</p>
-      </div>
-      <div className="flex gap-2 mt-2">
-        <Button color="primary" href={`/properties/${property.id}/edit`} as={Link}>
+    <Card key={property.id}>
+      <CardHeader>
+        <Link className="relative w-full h-48" href={`/properties/${property.id}`}>
+          <Image
+            className="w-full rounded-md object-cover"
+            src={property.images[0]}
+            alt="Property 1"
+            fill
+          />
+        </Link>
+      </CardHeader>
+      <CardBody>
+        <p className="text-lg font-semibold text-default-700">{property.name}</p>
+        <PropertyLocation location={property.location} />
+      </CardBody>
+
+      <CardFooter className="flex justify-end gap-2">
+        <Button color="primary" variant="light" href={`/properties/${property.id}/edit`} as={Link}>
           Edit
         </Button>
-        <Button color="danger" onClick={() => handleDeleteProperty(property.id)}>
+        <Button color="danger" variant="light" onClick={() => handleDeleteProperty(property.id)}>
           Delete
         </Button>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   ))
 };
 
