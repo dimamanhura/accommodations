@@ -1,4 +1,7 @@
-import Link from "next/link";
+'use client';
+
+import { useRouter } from 'next/navigation'
+import { Pagination as NextUiPagination } from '@nextui-org/react';
 
 interface PaginationProps {
   totalItems: number;
@@ -11,6 +14,8 @@ const Pagination = ({
   pageSize,
   page,
 }: PaginationProps) => {
+  const router = useRouter();
+
   const totalPages = Math.ceil(totalItems / pageSize);
 
   if (totalPages <= 1)  {
@@ -19,32 +24,17 @@ const Pagination = ({
 
   return (
     <section className="container mx-auto flex justify-center items-center my-8">
-      {page > 1 ? (
-        <Link
-          href={`/properties?page=${page - 1}`}
-          className="mr-2 px-2 py-1 border border-gray-300 rounded"
-        >
-          Previous
-        </Link>
-      ) : null }
-      
-      {
-
-      }
-
-      <span className="mx-2">Page {page} of {totalPages}</span>
-
-      {page < totalPages ? (
-        <Link
-        href={`/properties?page=${page + 1}`}
-        className="ml-2 px-2 py-1 border border-gray-300 rounded"
-      >
-        Next
-      </Link>
-      ) : null }
-      
+      <NextUiPagination
+        showControls
+        initialPage={page} 
+        isCompact
+        total={totalPages}
+        onChange={(page) => {
+          router.push(`/properties?page=${page}`);
+        }}
+      />      
     </section>
-  )
+  );
 };
 
 export default Pagination;
