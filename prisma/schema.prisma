@@ -15,9 +15,9 @@ type Seller {
 }
 
 type Rates {
-  weekly      Int
-  monthly     Int
-  nightly     Int
+  weekly      Int?
+  monthly     Int?
+  nightly     Int?
 }
 
 type Location {

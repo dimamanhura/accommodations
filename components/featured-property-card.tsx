@@ -1,102 +1,52 @@
-import { Button } from "@nextui-org/react";
+import { Button, Divider } from "@nextui-org/react";
 import { Property } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  FaRulerCombined,
-  FaMoneyBill,
-  FaMapMarked,
-  FaBath,
-  FaBed,
-} from "react-icons/fa";
+import PropertyRentOptions from "@/components/property-rent-options";
+import PropertyRateDisplay from "@/components/property-rate-display";
+import PropertyFacilities from "@/components/property-facilities";
+import PropertyLocation from "@/components/property-location";
 
 interface PropertyCardProps {
   property: Property;
 };
 
 const FeaturedPropertyCard = ({ property }:PropertyCardProps) => {
-  const getRateDisplay = () => {
-    const { rates: { monthly, weekly, nightly } } = property;
-
-    if (monthly) {
-      return `$${monthly.toLocaleString()}/mo`;
-    }
-
-    if (weekly) {
-      return `$${weekly.toLocaleString()}/wk`;
-    }
-
-    if (nightly) {
-      return `$${nightly.toLocaleString()}/night`;
-    }
-  };
-
   return (
-    <div
-      className="bg-white rounded-xl shadow-md relative flex flex-col md:flex-row"
-    >
+    <div className="bg-white rounded-xl shadow-md relative flex">
+      <PropertyRateDisplay rates={property.rates} />
+
       <Image
         width={0}
         height={0}
         sizes="100vw"
         src={property.images[0]}
         alt=""
-        className="w-full h-auto rounded-t-xl md:rounded-tr-none md:rounded-l-xl md:w-2/5"
+        className="h-auto rounded-l-xl w-2/5"
       />
-      <div className="p-6">
-        <h3 className="text-xl font-bold">{property.name}</h3>
-        <div className="text-gray-600 mb-4">{property.type}</div>
-        <h3 className="absolute top-[10px] left-[10px] bg-white px-4 py-2 rounded-lg text-blue-500 font-bold text-right md:text-center lg:text-right">
-          {getRateDisplay()}
-        </h3>
-        <div className="flex justify-center gap-4 text-gray-500 mb-4">
-          <p>
-            <FaBed className="inline-block mr-2" /> {property.beds}
-            <span className="md:hidden lg:inline">Beds</span>
-          </p>
-          <p>
-            <FaBath className="inline-block mr-2" /> {property.baths}
-            <span className="md:hidden lg:inline">Baths</span>
-          </p>
-          <p>
-            <FaRulerCombined className="inline-block mr-2" /> {property.squareFeet}
-            <span className="md:hidden lg:inline">sqft</span>
-          </p>
-        </div>
 
-        <div
-          className="flex justify-center gap-4 text-green-900 text-sm mb-4"
-        >
-          {property.rates.nightly && (
-            <p>
-              <FaMoneyBill className="md:hidden lg:inline" /> Nightly
-            </p>
-          )}
+      <div className="p-6 w-3/5 flex flex-col justify-between">
+        <div className="flex flex-col">
+          <h3 className="font-bold text-large text-default-700">{property.name}</h3>
+          <small className="text-default-500">{property.type}</small>
 
-          {property.rates.weekly && (
-            <p>
-              <FaMoneyBill className="md:hidden lg:inline" /> Weekly
-            </p>
-          )}
-          
-          {property.rates.monthly && (
-            <p>
-              <FaMoneyBill className="md:hidden lg:inline" /> Monthly
-            </p>
-          )}
-        </div>
-
-        <div className="border border-gray-200 mb-5"></div>
-
-        <div className="flex flex-col lg:flex-row justify-between">
-          <div className="flex align-middle gap-2 mb-4 lg:mb-0">
-            <span className="text-orange-700">
-              <FaMapMarked className="text-lg text-orange-700 mr-2 inline-block" /> {property.location.city} {property.location.state}
-            </span>
+          <div className="flex justify-center mt-4">
+            <PropertyFacilities property={property} />
           </div>
-          <Button color="primary" href={`/properties/${property.id}`} as={Link}>
-            Details
-          </Button>
+
+          <div className="flex justify-center mt-4">
+            <PropertyRentOptions rates={property.rates} />
+          </div>
+        </div>
+
+        <div className="flex flex-col w-full">
+          <Divider className="mb-2" />
+          <div className="flex justify-between w-full">
+            <PropertyLocation location={property.location} />
+            <Button color="primary" variant="light" href={`/properties/${property.id}`} as={Link}>
+              Details
+            </Button>
+          </div>
         </div>
       </div>
     </div>
