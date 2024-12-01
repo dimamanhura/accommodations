@@ -13,100 +13,8 @@ import {
 import addProperty from "@/actions/add-property";
 import SubmitButton from "@/components/submit-button";
 import FormSection from "@/components/form-section";
-
-const apartmentTypes = [
-  {
-    value: 'Apartment',
-    label: 'Apartment',
-  },
-  {
-    value: 'Condo',
-    label: 'Condo',
-  },
-  {
-    value: 'House',
-    label: 'House',
-  },
-  {
-    value: 'Cabin or Cottage',
-    label: 'CabinOrCottage',
-  },
-  {
-    value: 'Room',
-    label: 'Room',
-  },
-  {
-    value: 'Studio',
-    label: 'Studio',
-  },
-  {
-    value: 'Other',
-    label: 'Other',
-  },
-];
-
-const amenities = [
-  {
-    label: 'Wifi',
-    value: 'amenity_wifi'
-  },
-  {
-    label: 'Full kitchen',
-    value: 'amenity_kitchen'
-  },
-  {
-    label: 'Washer & Dryer',
-    value: 'amenity_washer_dryer'
-  },
-  {
-    label: 'Free Parking',
-    value: 'amenity_free_parking'
-  },
-  {
-    label: 'Swimming Pool',
-    value: 'amenity_pool'
-  },
-  {
-    label: 'Hot Tub',
-    value: 'amenity_hot_tub'
-  },
-  {
-    label: '24/7 Security',
-    value: 'amenity_24_7_security'
-  },
-  {
-    label: 'Wheelchair Accessible',
-    value: 'amenity_wheelchair_accessible'
-  },
-  {
-    label: 'Elevator Access',
-    value: 'amenity_elevator_access'
-  },
-  {
-    label: 'Dishwasher',
-    value: 'amenity_dishwasher'
-  },
-  {
-    label: 'Gym/Fitness Center',
-    value: 'amenity_gym_fitness_center'
-  },
-  {
-    label: 'Air Conditioning',
-    value: 'amenity_air_conditioning'
-  },
-  {
-    label: 'Balcony/Patio',
-    value: 'amenity_balcony_patio'
-  },
-  {
-    label: 'Smart TV',
-    value: 'amenity_smart_tv'
-  },
-  {
-    label: 'Coffee Maker',
-    value: 'amenity_coffee_maker'
-  },
-];
+import amenities from "@/amenities";
+import types from '@/types';
 
 const PropertyAddForm = () => {
   const [state, action] = useFormState(addProperty, {
@@ -130,9 +38,9 @@ const PropertyAddForm = () => {
             label="Property Type"
             name="type"
           >
-            {apartmentTypes.map((apartmentType) => (
-              <SelectItem key={apartmentType.value} value={apartmentType.value}>
-                {apartmentType.label}
+            {types.map((type) => (
+              <SelectItem key={type.value} value={type.value}>
+                {type.label}
               </SelectItem>
             ))}
           </Select>

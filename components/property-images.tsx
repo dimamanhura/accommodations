@@ -6,7 +6,7 @@ interface PropertyImagesProps {
 
 const PropertyImages = ({ images }: PropertyImagesProps) => {
   return (
-    <section className="bg-blue-50 p-4">
+    <section className="bg-blue-50 pt-4 pb-16">
       <div className="container mx-auto">
         {images.length === 1 ? (
           <Image
