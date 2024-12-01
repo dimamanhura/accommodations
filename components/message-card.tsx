@@ -9,6 +9,7 @@ import { Message, Property, User as UserModel } from "@prisma/client";
 import { Button, Card, CardBody, CardFooter, Link, Chip, User } from "@nextui-org/react";
 import { FaEnvelope, FaPhone } from "react-icons/fa";
 import { formatPhone } from "@/utils/phone";
+import paths from "@/utils/paths";
 
 interface MessageCardProps {
   message: Message & { property: Property, sender: UserModel };
@@ -36,7 +37,7 @@ const MessageCard = ({ message }: MessageCardProps) => {
       )}
 
       <CardBody>
-        <NextLink href={`/properties/${message.property.id}`}>
+        <NextLink href={paths.propertyDetails(message.property.id)}>
           <User
             className="justify-start"
             description={`${message.name}, ${new Date(message.createdAt).toLocaleString()}`}

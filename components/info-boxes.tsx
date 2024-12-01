@@ -1,4 +1,5 @@
 import InfoBox from "@/components/info-box";
+import paths from "@/utils/paths";
 
 const InfoBoxes = () => {
   return (
@@ -8,14 +9,14 @@ const InfoBoxes = () => {
           <InfoBox
             linkTitle="Browse Properties"
             heading="For Renters"
-            link="/properties"
+            link={paths.properties()}
           >
             Find your dream rental property. Bookmark properties and contact owners.
           </InfoBox>
           <InfoBox
             linkTitle="For Property Owners"
             heading="For Property Owners"
-            link="/properties/add"
+            link={paths.propertyAdd()}
           >
             List your properties and reach potential tenants. Rent as an airbnb or long term.
           </InfoBox>

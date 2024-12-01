@@ -8,6 +8,7 @@ import BookmarkButton from "@/components/bookmark-button";
 import PropertyImages from "@/components/property-images";
 import ShareButtons from "@/components/share-buttons";
 import { db } from "@/db";
+import paths from "@/utils/paths";
 
 interface PropertyPageProps {
   params: Promise<{ id: string }>;
@@ -26,7 +27,7 @@ const PropertyPage = async ({ params }: PropertyPageProps) => {
       <PropertyHeaderImage image={property.images[0]} />
       <section>
         <div className="container m-auto py-6 px-6">
-          <Link href="/properties" className="text-blue-500 hover:text-blue-600 flex items-center">
+          <Link href={paths.properties()} className="text-blue-500 hover:text-blue-600 flex items-center">
             <FaArrowLeft className="mr-2" /> Back to Properties
           </Link>
         </div>

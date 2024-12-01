@@ -1,5 +1,6 @@
 import PropertyCard from '@/components/property-card';
 import { db } from '@/db';
+import paths from '@/utils/paths';
 import { Button } from '@nextui-org/react';
 import Link from 'next/link';
 
@@ -35,7 +36,7 @@ const HomeProperties = async () => {
         </div>
       </section>
       <section className='w-full my-12 flex items-center justify-center'>
-        <Button size="lg" href="/properties" as={Link}>
+        <Button size="lg" href={paths.properties()} as={Link}>
           View All Properties
         </Button>
       </section>

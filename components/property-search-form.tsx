@@ -3,41 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Input, Select, SelectItem } from "@nextui-org/react";
-
-const apartmentTypes = [
-  {
-    value: 'All',
-    label: 'All',
-  },
-  {
-    value: 'Apartment',
-    label: 'Apartment',
-  },
-  {
-    value: 'Condo',
-    label: 'Condo',
-  },
-  {
-    value: 'House',
-    label: 'House',
-  },
-  {
-    value: 'Cabin or Cottage',
-    label: 'CabinOrCottage',
-  },
-  {
-    value: 'Room',
-    label: 'Room',
-  },
-  {
-    value: 'Studio',
-    label: 'Studio',
-  },
-  {
-    value: 'Other',
-    label: 'Other',
-  },
-];
+import paths from "@/utils/paths";
+import types from "@/utils/types";
 
 interface PropertySearchFormProps {
   propertyType?: string;
@@ -53,10 +20,9 @@ export const PropertySearchForm = (props: PropertySearchFormProps) => {
     e.preventDefault();
 
     if (location === '' && propertyType === 'All') {
-      router.push('/properties')
+      router.push(paths.properties())
     } else {
-      const query = `?location=${location}&propertyType=${propertyType}`;
-      router.push(`/properties/search-results/${query}`)
+      router.push(paths.propertiesSearch(location, propertyType))
     }
   };
 
@@ -79,9 +45,9 @@ export const PropertySearchForm = (props: PropertySearchFormProps) => {
         label="Property Type"
         onChange={(e) => setPropertyType(e.target.value)}
       >
-        {apartmentTypes.map((apartmentType) => (
-          <SelectItem key={apartmentType.value}>
-            {apartmentType.label}
+        {types.map((type) => (
+          <SelectItem key={type.value}>
+            {type.label}
           </SelectItem>
         ))}
       </Select>

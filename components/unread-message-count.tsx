@@ -1,6 +1,7 @@
 'use client';
 
 import { useGlobalContext } from "@/context/global-context";
+import paths from "@/utils/paths";
 import { Badge } from "@nextui-org/react";
 import Link from "next/link";
 import { FaBell } from "react-icons/fa";
@@ -13,7 +14,7 @@ const UnreadMessageCount = () => {
   }
 
   return (
-    <Link href="/messages">
+    <Link href={paths.messages()}>
       <Badge
         content={unreadCount}
         shape="circle"

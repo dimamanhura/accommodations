@@ -26,6 +26,7 @@ import logo from '@/assets/images/logo.png';
 import NextLink from 'next/link';
 import { FaGoogle } from 'react-icons/fa';
 import UnreadMessageCount from '@/components/unread-message-count';
+import paths from '@/utils/paths';
 
 interface ProvidersType {
   [key: string]: {
@@ -49,7 +50,7 @@ const Navbar = () => {
 
   return (
     <Nav>
-      <NavbarBrand href="/" as={NextLink}>
+      <NavbarBrand href={paths.home()} as={NextLink}>
         <Image
           className="h-10 w-auto"
           src={logo}
@@ -62,7 +63,7 @@ const Navbar = () => {
         <NavbarItem isActive={pathname === '/'}>
           <Link
             color={pathname === '/' ? 'primary' : 'foreground'}
-            href="/"
+            href={paths.home()}
             as={NextLink}
           >
             Home
@@ -71,21 +72,24 @@ const Navbar = () => {
         <NavbarItem isActive={pathname === '/properties'}>
           <Link
             color={pathname === '/properties' ? 'primary' : 'foreground'}
-            href="/properties"
+            href={paths.properties()}
             as={NextLink}
           >
             Properties
           </Link>
         </NavbarItem>
-        <NavbarItem isActive={pathname === '/properties/add'}>
-          <Link
-            color={pathname === '/properties/add' ? 'primary' : 'foreground'}
-            href="/properties/add"
-            as={NextLink}
-          >
-            Add Property
-          </Link>
-        </NavbarItem>
+        {session && (
+          <NavbarItem isActive={pathname === '/properties/add'}>
+            <Link
+              color={pathname === '/properties/add' ? 'primary' : 'foreground'}
+              href={paths.propertyAdd()}
+              as={NextLink}
+            >
+              Add Property
+            </Link>
+          </NavbarItem>
+        )}
+        
       </NavbarContent>
 
       <NavbarContent as="div" justify="end">
@@ -107,21 +111,21 @@ const Navbar = () => {
               <DropdownMenu aria-label="Profile Actions" variant="flat">
                 <DropdownItem
                   key="profile"
-                  href="/profile"
+                  href={paths.profile()}
                   as={NextLink}
                 >
                   Your Profile
                 </DropdownItem>
                 <DropdownItem
                   key="saved_properties"
-                  href="/properties/saved"
+                  href={paths.propertiesSaved()}
                   as={NextLink}
                 >
                   Saved Properties
                 </DropdownItem>
                 <DropdownItem
                   key="messages"
-                  href="/messages"
+                  href={paths.messages()}
                   as={NextLink}
                 >
                   Messages

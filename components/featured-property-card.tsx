@@ -6,6 +6,7 @@ import PropertyRentOptions from "@/components/property-rent-options";
 import PropertyRateDisplay from "@/components/property-rate-display";
 import PropertyFacilities from "@/components/property-facilities";
 import PropertyLocation from "@/components/property-location";
+import paths from "@/utils/paths";
 
 interface PropertyCardProps {
   property: Property;
@@ -43,7 +44,7 @@ const FeaturedPropertyCard = ({ property }:PropertyCardProps) => {
           <Divider className="mb-2" />
           <div className="flex justify-between w-full">
             <PropertyLocation location={property.location} />
-            <Button color="primary" variant="light" href={`/properties/${property.id}`} as={Link}>
+            <Button color="primary" variant="light" href={paths.propertyDetails(property.id)} as={Link}>
               Details
             </Button>
           </div>

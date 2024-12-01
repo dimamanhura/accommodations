@@ -5,6 +5,7 @@ import Link from "next/link";
 import PropertyRateDisplay from "@/components/property-rate-display";
 import PropertyFacilities from "@/components/property-facilities";
 import PropertyLocation from "@/components/property-location";
+import paths from "@/utils/paths";
 
 interface PropertyCardProps {
   property: Property;
@@ -26,7 +27,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
       </CardBody>
       <CardFooter className="flex justify-between px-4 pt-2 pb-6">
         <PropertyLocation location={property.location} />
-        <Button color="primary" variant="light" href={`/properties/${property.id}`} as={Link}>
+        <Button color="primary" variant="light" href={paths.propertyDetails(property.id)} as={Link}>
           Details
         </Button>
       </CardFooter>

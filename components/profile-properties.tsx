@@ -6,7 +6,8 @@ import Link from "next/link";
 import deletePropertyAction from "@/actions/delete-property";
 import { Property } from "@prisma/client";
 import { Button, Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
-import PropertyLocation from "./property-location";
+import PropertyLocation from "@/components/property-location";
+import paths from "@/utils/paths";
 
 interface ProfilePropertiesProps {
   initialProperties: Property[];
@@ -31,7 +32,7 @@ const ProfileProperties = ({ initialProperties }: ProfilePropertiesProps) => {
   return properties.map(property => (
     <Card key={property.id}>
       <CardHeader>
-        <Link className="relative w-full h-48" href={`/properties/${property.id}`}>
+        <Link className="relative w-full h-48" href={paths.propertyDetails(property.id)}>
           <Image
             className="w-full rounded-md object-cover"
             src={property.images[0]}
@@ -46,7 +47,7 @@ const ProfileProperties = ({ initialProperties }: ProfilePropertiesProps) => {
       </CardBody>
 
       <CardFooter className="flex justify-end gap-2">
-        <Button color="primary" variant="light" href={`/properties/${property.id}/edit`} as={Link}>
+        <Button color="primary" variant="light" href={paths.propertyEdit(property.id)} as={Link}>
           Edit
         </Button>
         <Button color="danger" variant="light" onClick={() => handleDeleteProperty(property.id)}>

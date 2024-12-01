@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { Pagination as NextUiPagination } from '@nextui-org/react';
+import paths from '@/utils/paths';
 
 interface PaginationProps {
   totalItems: number;
@@ -30,7 +31,7 @@ const Pagination = ({
         isCompact
         total={totalPages}
         onChange={(page) => {
-          router.push(`/properties?page=${page}`);
+          router.push(paths.properties(page));
         }}
       />      
     </section>
