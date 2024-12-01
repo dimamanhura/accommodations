@@ -23,9 +23,9 @@ const addPropertySchema = z.object({
     zip: z.string().min(3).max(255),
   }),
   rates: z.object({
-    nightly: z.number().positive().min(1), 
-    weekly: z.number().positive().min(1),
-    monthly: z.number().positive().min(1),
+    nightly: z.number().positive().optional().nullable(), 
+    weekly: z.number().positive().optional().nullable(),
+    monthly: z.number().positive().optional().nullable(),
   }),
   seller: z.object({
     phone: z.string().min(3).max(255),
@@ -157,9 +157,15 @@ async function addProperty(prevState: AddPropertyFormState, formData: FormData):
     baths: parseInt(formData.get('baths') as string),
     squareFeet: parseInt(formData.get('squareFeet') as string),
     rates: {
-      nightly: parseInt(formData.get('rates.nightly') as string), 
-      weekly: parseInt(formData.get('rates.weekly') as string),
-      monthly: parseInt(formData.get('rates.monthly') as string),
+      nightly: formData.get('rates.nightly')
+        ? parseInt(formData.get('rates.nightly') as string)
+        : null, 
+      weekly: formData.get('rates.weekly') 
+        ? parseInt(formData.get('rates.weekly') as string)
+        : null,
+      monthly: formData.get('rates.monthly')
+        ? parseInt(formData.get('rates.monthly') as string)
+        : null,
     },
     seller: {
       phone: formData.get('seller.phone'),
