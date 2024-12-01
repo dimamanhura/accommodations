@@ -1,14 +1,16 @@
 'use client';
 
 import { useState } from "react";
+import NextLink from "next/link";
 import markMessageAsRead from "@/actions/mark-message-as-read";
 import deleteMessage from "@/actions/delete-message";
 import { useGlobalContext } from "@/context/global-context";
-import { Message, Property, User } from "@prisma/client";
-import { Button, Chip } from "@nextui-org/react";
+import { Message, Property, User as UserModel } from "@prisma/client";
+import { Button, Card, CardBody, CardFooter, Link, Chip, User } from "@nextui-org/react";
+import { FaEnvelope, FaPhone } from "react-icons/fa";
 
 interface MessageCardProps {
-  message: Message & { property: Property, sender: User };
+  message: Message & { property: Property, sender: UserModel };
 };
 
 const MessageCard = ({ message }: MessageCardProps) => {
@@ -27,38 +29,50 @@ const MessageCard = ({ message }: MessageCardProps) => {
   };
 
   return (
-    <div className="relative bg-white p-4 rounded-md shadow-md border border-grey-200">
+    <Card className="relative bg-white p-4 rounded-md shadow-md border border-grey-200">
       {!isRead && (
-        <Chip className="absolute top-2 right-2" color="warning">New</Chip>
+        <Chip className="absolute top-2 right-2" variant="flat" radius="sm" color="primary">New</Chip>
       )}
-      <h2 className="text-xl mb-4">
-        <span className="font-bold">Property Inquiry:</span>{' '}
-        { message.property.name }
-      </h2>
-      <p className="text-gray-700">{message.body}</p>
-      <ul className="mt-4">
-        <li>
-          <strong>Reply Email:</strong>{' '}
-          <a href={`mailto:${message.email}`} className="text-blue-500">{message.email}</a>
-        </li>
-        <li>
-          <strong>Reply Phone:</strong>{' '}
-          <a href={`tel:${message.email}`} className="text-blue-500">{message.phone}</a>
-        </li>
-        <li>
-          <strong>Received:</strong>{' '}
-          { new Date(message.createdAt).toLocaleString() }
-        </li>
-        <div className="flex gap-2 mt-4">
-          <Button color="primary" onClick={handleReadClick}>
-            {isRead ? 'Mark As New' : 'Mark As Read'}
-          </Button>
-          <Button color="danger" onClick={handleDeleteClick}>
-            Delete
-          </Button>
+
+      <CardBody>
+        <NextLink href={`/properties/${message.property.id}`}>
+          <User
+            className="justify-start"
+            description={`${message.name}, ${new Date(message.createdAt).toLocaleString()}`}
+            avatarProps={{
+              radius: 'sm',
+              src: message.property.images[0] || ''
+            }}
+            name={message.property.name}
+          />
+        </NextLink>
+        
+        <p className="text-default-400 text-small mt-4">
+          {message.body}
+        </p>
+
+        <div className="flex gap-4 justify-start mt-4 text-small">
+          <Link href={`mailto:${message.email}`} color="primary">
+            <FaEnvelope className="mr-2" />
+            {message.email}
+          </Link>
+
+          <Link href={`tel:${message.phone}`} color="primary">
+            <FaPhone className="mr-2" />
+            {message.phone}
+          </Link>
         </div>
-      </ul>
-    </div>
+
+      </CardBody>
+      <CardFooter>
+        <Button variant="light" color="primary" onClick={handleReadClick}>
+          {isRead ? 'Mark As New' : 'Mark As Read'}
+        </Button>
+        <Button variant="light" color="danger" onClick={handleDeleteClick}>
+          Delete
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };
 

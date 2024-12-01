@@ -16,7 +16,7 @@ const HomeProperties = async () => {
 
   return (
     <>
-      <section className='px-4 py-6'>
+      <section className='px-4 my-6'>
         <div className='container-xl lg:container m-auto px-4 py-4'>
           <h2 className='text-3xl font-bold mb-6 text-center'>
             Recent Properties
@@ -34,7 +34,7 @@ const HomeProperties = async () => {
           )}
         </div>
       </section>
-      <section className='w-full my-6 flex items-center justify-center'>
+      <section className='w-full my-12 flex items-center justify-center'>
         <Button size="lg" href="/properties" as={Link}>
           View All Properties
         </Button>

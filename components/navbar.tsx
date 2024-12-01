@@ -122,6 +122,13 @@ const Navbar = () => {
                   Saved Properties
                 </DropdownItem>
                 <DropdownItem
+                  key="messages"
+                  href="/messages"
+                  as={NextLink}
+                >
+                  Messages
+                </DropdownItem>
+                <DropdownItem
                   key="logout"
                   color="danger"
                   onClick={() => {
