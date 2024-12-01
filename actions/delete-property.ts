@@ -1,8 +1,8 @@
 'use server';
 
-import { auth } from "@/auth";
+import { auth } from "@/utils/auth";
 import { revalidatePath } from "next/cache";
-import cloudinary from "@/cloudinary";
+import cloudinary from "@/utils/cloudinary";
 import { db } from "@/db";
 
 async function deletePropertyAction(propertyId: string) {

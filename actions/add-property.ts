@@ -3,8 +3,8 @@
 import { z } from 'zod';
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import cloudinary from "@/cloudinary";
-import { auth } from "@/auth";
+import cloudinary from "@/utils/cloudinary";
+import { auth } from "@/utils/auth";
 import { db } from "@/db";
 
 const addPropertySchema = z.object({

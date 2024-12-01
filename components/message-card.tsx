@@ -8,6 +8,7 @@ import { useGlobalContext } from "@/context/global-context";
 import { Message, Property, User as UserModel } from "@prisma/client";
 import { Button, Card, CardBody, CardFooter, Link, Chip, User } from "@nextui-org/react";
 import { FaEnvelope, FaPhone } from "react-icons/fa";
+import { formatPhone } from "@/utils/phone";
 
 interface MessageCardProps {
   message: Message & { property: Property, sender: UserModel };
@@ -59,7 +60,7 @@ const MessageCard = ({ message }: MessageCardProps) => {
 
           <Link href={`tel:${message.phone}`} color="primary">
             <FaPhone className="mr-2" />
-            {message.phone}
+            {formatPhone(message.phone)}
           </Link>
         </div>
 

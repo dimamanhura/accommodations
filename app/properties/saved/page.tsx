@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@/utils/auth";
 import PropertyCard from "@/components/property-card";
 import { db } from "@/db";
 import { notFound } from "next/navigation";

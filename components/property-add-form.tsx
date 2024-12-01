@@ -13,8 +13,8 @@ import {
 import addProperty from "@/actions/add-property";
 import SubmitButton from "@/components/submit-button";
 import FormSection from "@/components/form-section";
-import amenities from "@/amenities";
-import types from '@/types';
+import amenities from "@/utils/amenities";
+import types from '@/utils/types';
 
 const PropertyAddForm = () => {
   const [state, action] = useFormState(addProperty, {

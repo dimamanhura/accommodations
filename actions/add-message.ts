@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { auth } from "@/auth";
+import { auth } from "@/utils/auth";
 import { db } from "@/db";
 
 const addMessageSchema = z.object({

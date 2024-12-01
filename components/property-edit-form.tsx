@@ -14,8 +14,8 @@ import {
 import { Property } from "@prisma/client";
 import SubmitButton from "@/components/submit-button";
 import FormSection from "@/components/form-section";
-import amenities from '@/amenities';
-import types from '@/types';
+import amenities from '@/utils/amenities';
+import types from '@/utils/types';
 
 interface PropertyEditFormProps {
   property: Property;

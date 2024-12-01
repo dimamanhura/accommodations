@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@/utils/auth";
 import MessageCard from "@/components/message-card";
 import { fetchMessages } from "@/db/queries/messages";
 import { notFound } from "next/navigation";

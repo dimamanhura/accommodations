@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@/utils/auth";
 import { notFound } from "next/navigation";
 import ProfileProperties from "@/components/profile-properties";
 import { fetchUserProperties } from "@/db/queries/properties";

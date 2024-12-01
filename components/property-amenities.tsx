@@ -1,5 +1,5 @@
 import { FaCheck } from "react-icons/fa";
-import amenitiesOptions from "@/amenities";
+import amenitiesOptions from "@/utils/amenities";
 
 interface PropertyAmenitiesProps {
   amenities: string[];

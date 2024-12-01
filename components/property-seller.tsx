@@ -1,4 +1,4 @@
-import parsePhoneNumber from 'libphonenumber-js'
+import { formatPhone } from "@/utils/phone";
 import { Link } from "@nextui-org/react";
 import { Seller } from "@prisma/client";
 import { FaEnvelope, FaPhone, FaUser } from "react-icons/fa";
@@ -22,7 +22,7 @@ const PropertySeller = ({ seller }: PropertySellerProps) => {
 
       <Link className='text-default-500' href={`tel:${seller.phone}`}>
         <FaPhone className="mr-4" />
-        {parsePhoneNumber(seller.phone)?.formatInternational()}
+        {formatPhone(seller.phone)}
       </Link>
     </div>
   );
