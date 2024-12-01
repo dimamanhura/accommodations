@@ -1,6 +1,4 @@
-import Image from "next/image";
 import { auth } from "@/auth";
-import profileDefault from '@/assets/images/profile.png';
 import { notFound } from "next/navigation";
 import ProfileProperties from "@/components/profile-properties";
 import { fetchUserProperties } from "@/db/queries/properties";

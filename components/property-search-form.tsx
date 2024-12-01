@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Input, Select, SelectItem } from "@nextui-org/react";
-import { FaSearch } from "react-icons/fa";
 
 const apartmentTypes = [
   {

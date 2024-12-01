@@ -35,8 +35,6 @@ interface ProvidersType {
 
 const Navbar = () => {
   const { data: session } = useSession();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false);
   const pathname = usePathname();
   const [providers, setProviders] = useState<ProvidersType | null>(null);
 
