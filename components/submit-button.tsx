@@ -7,12 +7,14 @@ interface SubmitButtonProps {
   startContent?: React.ReactElement;
   endContent?: React.ReactElement;
   children: React.ReactNode; 
+  color?: "primary" | "default" | "secondary" | "success" | "warning" | "danger" | undefined; 
 };
 
 const SubmitButton = ({
   startContent,
   endContent,
   children,
+  color = 'primary',
 }: SubmitButtonProps) => {
   const status = useFormStatus();
 
@@ -22,7 +24,7 @@ const SubmitButton = ({
       isDisabled={status.pending}
       endContent={endContent}
       fullWidth
-      color="primary"
+      color={color}
       type="submit"
     >
       {status.pending ? 'Loading...' : children}

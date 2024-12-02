@@ -26,6 +26,12 @@ const paths = {
   propertyEdit(propertyId: string) {
     return `/properties/${propertyId}/edit`;
   },
+  termsAndConditions() {
+    return '/terms-and-conditions';
+  },
+  privacyPolicy() {
+    return '/privacy-policy';
+  },
 };
 
 export default paths;
