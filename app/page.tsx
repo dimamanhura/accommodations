@@ -4,9 +4,9 @@ import HomeProperties from "@/components/home-properties";
 import InfoBoxes from "@/components/info-boxes";
 
 export const metadata = {
-  title: 'Property pulse',
-  keywords: 'rental, property, real estate',
   description: 'Find the perfect rental property',
+  keywords: 'rental, property, real estate',
+  title: 'Property pulse',
 };
 
 const HomePage = () => {

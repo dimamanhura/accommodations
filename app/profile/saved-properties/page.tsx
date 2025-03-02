@@ -3,7 +3,7 @@ import PropertyCard from "@/components/property-card";
 import { db } from "@/db";
 import { notFound } from "next/navigation";
 
-const SavedPropertiesPage = async () => {
+const ProfileSavedPropertiesPage = async () => {
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -48,4 +48,4 @@ const SavedPropertiesPage = async () => {
   )
 };
 
-export default SavedPropertiesPage;
+export default ProfileSavedPropertiesPage;

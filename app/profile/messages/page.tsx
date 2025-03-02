@@ -3,7 +3,7 @@ import MessageCard from "@/components/message-card";
 import { fetchMessages } from "@/db/queries/messages";
 import { notFound } from "next/navigation";
 
-const MessagePage = async () => {
+const ProfileMessagesPage = async () => {
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -38,4 +38,4 @@ const MessagePage = async () => {
   );
 };
 
-export default MessagePage
+export default ProfileMessagesPage;
